@@ -33,6 +33,7 @@
   --stone-300: #8a9391;
   --stone-200: #c3c9c7;
   --stone-100: #e7eae9;
+  --stone-50: #f8f9f9; /* Added 18 Sep 2026 for the Services card. Not in the design system yet. */
   --surface-page: var(--paper-200);
   --surface-card: #ffffff;
   --surface-raised: var(--paper-300);

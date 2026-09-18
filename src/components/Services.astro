@@ -1,0 +1,202 @@
+---
+// Home services section (condensed), locked 18 Sep 2026 (Services board on the Sortoise Home canvas).
+// Light grey card (Stone 50) on the page ground. Heading and intro, four solid colour tiles in a
+// 2x2 grid (one column on phones), a "See all services" link to the Services page, then a
+// "Powered by" strip with the platform logos scrolling continuously left.
+// Copy matches the board 1:1. Do not change without Aaron.
+// This is the condensed version of the Services page; the page expands the same four tiles.
+
+const tiles = [
+  {
+    tone: "deep",
+    title: "Custom software and web apps",
+    text: "Quoting, proposals and instant invoicing. Data pulled together from the platforms you already use, formatted and stored once, so the manual admin hours disappear.",
+    icon: "software",
+  },
+  {
+    tone: "teal",
+    title: "Custom CRMs",
+    text: "Text and email that follows up leads and keeps existing customers coming back. Calendar booking, reminders, pipelines and the customer journey mapped out properly.",
+    icon: "crm",
+  },
+  {
+    tone: "pink",
+    title: "Business admin and process automation",
+    text: "Repetitive admin done by the system. Complex tasks with multiple outcomes handled by logic, and documents and compliance paperwork created for you.",
+    icon: "admin",
+  },
+  {
+    tone: "amber",
+    title: "Mobile apps for the field",
+    text: "Apps for the people on site that feed straight into your database. Missed calls picked up and dropped into the CRM. Reporting and analytics on top.",
+    icon: "mobile",
+  },
+];
+
+// Logo files live in public/logos. "mark" logos are square icons, "word" logos are wordmarks,
+// so they get different heights and read as the same size.
+const logos = [
+  { name: "Supabase", file: "supabase.png", kind: "mark" },
+  { name: "Firebase", file: "firebase.png", kind: "mark" },
+  { name: "Zapier", file: "zapier.png", kind: "mark" },
+  { name: "n8n", file: "n8n.png", kind: "word" },
+  { name: "Make", file: "make.png", kind: "word" },
+  { name: "GitHub", file: "github.png", kind: "mark" },
+  { name: "Stripe", file: "stripe.png", kind: "word" },
+  { name: "Twilio", file: "twilio.png", kind: "word" },
+  { name: "Google Drive", file: "google-drive.png", kind: "mark" },
+  { name: "Google Calendar", file: "google-calendar.png", kind: "word" },
+  { name: "Calendly", file: "calendly.png", kind: "word" },
+  { name: "Microsoft Teams", file: "microsoft-teams.png", kind: "mark" },
+  { name: "Xero", file: "xero.png", kind: "mark" },
+  { name: "VS Code", file: "vs-code.png", kind: "mark" },
+];
+---
+
+<section id="services" class="services">
+  <div class="card">
+    <div class="heading">
+      <h2>Services we deliver</h2>
+      <p class="intro">If none of these look like your business, don't panic. If there's a task that eats your time, we can almost certainly build a tool to save it.</p>
+    </div>
+
+    <div class="grid">
+      {tiles.map((t, i) => (
+        <div class={`tile tile-${t.tone}`}>
+          <div class="tile-top">
+            {t.icon === "software" && (
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5v-11z"/><path d="M4 9h16"/><path d="M9.5 13l-2 2 2 2"/><path d="M14.5 13l2 2-2 2"/></svg>
+            )}
+            {t.icon === "crm" && (
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M16 4.5a3.2 3.2 0 0 1 0 6.4"/><path d="M17.5 14.2c2 .6 3 2.4 3 4.8"/></svg>
+            )}
+            {t.icon === "admin" && (
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.5h7l4 4V19a1.5 1.5 0 0 1-1.5 1.5h-9.5A1.5 1.5 0 0 1 5.5 19V5A1.5 1.5 0 0 1 7 3.5z"/><path d="M14 3.5V8h4"/><path d="M8.5 13.5l2.2 2.2 4.8-4.8"/></svg>
+            )}
+            {t.icon === "mobile" && (
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M11 18.5h2"/><path d="M10.5 6h3"/></svg>
+            )}
+            <span class="num">0{i + 1}</span>
+          </div>
+          <h3>{t.title}</h3>
+          <p>{t.text}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="link-row">
+      <a href="/services" class="see-all">See all services <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
+    </div>
+
+    <div class="powered">
+      <div class="eyebrow">Powered by</div>
+      <div class="reel" aria-label="Platforms we build with">
+        <div class="track">
+          {logos.map((l) => (
+            <div class="logo"><img src={`/logos/${l.file}`} alt={l.name} class={l.kind} loading="lazy" /></div>
+          ))}
+          {logos.map((l) => (
+            <div class="logo" aria-hidden="true"><img src={`/logos/${l.file}`} alt="" class={l.kind} loading="lazy" /></div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* This section brings its own 96px top padding (see the section spacing convention). */
+  .services { padding: 96px 24px 0; font-family: var(--font-body); }
+  .card {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    background: var(--stone-50);
+    border: 1px solid var(--stone-200);
+    border-radius: var(--radius-xl);
+    padding: 64px 56px 56px;
+    display: flex; flex-direction: column; gap: 40px;
+  }
+
+  .heading { display: flex; flex-direction: column; gap: 14px; }
+  h2 { margin: 0; font-size: 44px; max-width: 760px; }
+  .intro { margin: 0; font-size: 18px; line-height: var(--leading-body); max-width: 720px; color: var(--text-soft); }
+
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .tile {
+    border-radius: var(--radius-lg);
+    padding: 30px 30px 32px;
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  .tile-deep  { background: var(--deep-950); color: var(--teal-300); }
+  .tile-teal  { background: var(--deep-600); color: var(--teal-200); }
+  .tile-pink  { background: var(--pink-600); color: var(--pink-100); }
+  .tile-amber { background: var(--amber-600); color: var(--amber-100); }
+  .tile-top { display: flex; align-items: center; justify-content: space-between; }
+  .num {
+    font-family: var(--font-display);
+    font-size: var(--text-micro); font-weight: 600;
+    letter-spacing: var(--tracking-caps); text-transform: uppercase;
+  }
+  .tile h3 {
+    margin: 0;
+    font-size: 24px; line-height: 1.12; letter-spacing: var(--tracking-tight);
+    color: #ffffff;
+  }
+  .tile p { margin: 0; font-size: 16px; line-height: var(--leading-body); color: var(--paper-200); }
+
+  .link-row { display: flex; justify-content: flex-end; align-items: center; margin-top: -16px; }
+  .see-all {
+    display: inline-flex; align-items: center; gap: 8px;
+    min-height: 44px;
+    font-family: var(--font-display); font-size: 17px; font-weight: 700;
+    color: var(--text-link);
+    text-decoration: underline; text-decoration-color: currentColor;
+    text-underline-offset: 5px; text-decoration-thickness: 2px;
+  }
+  .see-all:hover { color: var(--deep-500); text-decoration-color: currentColor; }
+
+  .powered {
+    display: flex; flex-direction: column; gap: 20px;
+    padding-top: 32px;
+    border-top: 1px solid var(--stone-200);
+  }
+  .reel { position: relative; overflow: hidden; width: 100%; }
+  /* Fade at both edges so the logos slide in and out rather than cut off. */
+  .reel::before, .reel::after {
+    content: ""; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 1; pointer-events: none;
+  }
+  .reel::before { left: 0; background: linear-gradient(90deg, var(--stone-50), rgba(248, 249, 249, 0)); }
+  .reel::after { right: 0; background: linear-gradient(270deg, var(--stone-50), rgba(248, 249, 249, 0)); }
+  .track {
+    display: flex; gap: 56px; width: max-content;
+    animation: reel 45s linear infinite;
+  }
+  /* The list is in the track twice, so sliding it half way left lands exactly on the start again. */
+  @keyframes reel { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .logo { flex-shrink: 0; display: flex; align-items: center; justify-content: center; height: 44px; }
+  .logo img { width: auto; display: block; }
+  .logo img.mark { height: 36px; }
+  .logo img.word { height: 26px; }
+  @media (prefers-reduced-motion: reduce) { .track { animation: none; } }
+
+  @media (max-width: 820px) {
+    .services { padding: 96px 16px 0; }
+    .card { border-radius: 20px; padding: 36px 20px 32px; gap: 28px; }
+    .heading { gap: 10px; }
+    h2 { font-size: 32px; }
+    .intro { font-size: 16px; line-height: 1.5; }
+    .grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+    .tile { padding: 24px 22px 26px; gap: 14px; }
+    .tile-top svg { width: 28px; height: 28px; }
+    .tile h3 { font-size: 21px; line-height: 1.15; }
+    .tile p { font-size: 15px; line-height: 1.5; }
+    .link-row { margin-top: -8px; }
+    .see-all { font-size: 16px; }
+    .powered { gap: 16px; padding-top: 24px; }
+    .reel::before, .reel::after { width: 40px; }
+    .track { gap: 36px; }
+    .logo { height: 40px; }
+    .logo img.mark { height: 30px; }
+    .logo img.word { height: 22px; }
+  }
+</style>
