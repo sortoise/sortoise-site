@@ -1,0 +1,49 @@
+/* Sortoise site base styles. Colour, type and spacing values live in tokens.css. */
+@import "./tokens.css";
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--text-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  background: var(--surface-page);
+}
+
+h1, h2, h3, .display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  color: var(--text-brand);
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: var(--text-micro);
+  font-weight: 600;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+a {
+  color: #14685d;
+  text-decoration-color: var(--teal-200);
+  text-underline-offset: 3px;
+}
+a:hover { color: #1a8577; text-decoration-color: var(--teal-500); }
+
+/* The page ground: Paper 200 with the tortoise marks at 19%, tiled at 1600px.
+   One wrapper holds the nav, hero and every section. Never on the footer. */
+.page-ground {
+  background-color: var(--ground-bg, var(--paper-200));
+  background-image: url("/patterns/ground-marks.svg");
+  background-size: var(--ground-tile-size, 1600px);
+  background-position: center top;
+  color: var(--ground-text, var(--deep-700));
+}

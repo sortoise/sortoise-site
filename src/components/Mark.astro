@@ -1,0 +1,31 @@
+---
+// The tortoise mark from the design system's SiteNav. Deep Teal shell on paper.
+interface Props {
+  size?: number;
+}
+const { size = 44 } = Astro.props;
+const shell = "#0E534A";
+const inner = "#FAF5E0";
+---
+
+<svg width={size} height={size} viewBox="0 0 160 160" aria-hidden="true" class="mark">
+  <ellipse rx="19" ry="11" transform="translate(34,50) rotate(-40)" fill={shell}></ellipse>
+  <ellipse rx="19" ry="11" transform="translate(126,50) rotate(40)" fill={shell}></ellipse>
+  <ellipse rx="19" ry="11" transform="translate(34,110) rotate(40)" fill={shell}></ellipse>
+  <ellipse rx="19" ry="11" transform="translate(126,110) rotate(-40)" fill={shell}></ellipse>
+  <path d="M80 0c9 0 15 7 15 16s-6 18-15 18-15-9-15-18S71 0 80 0z" fill={shell}></path>
+  <circle cx="74" cy="14" r="2.7" fill={inner}></circle>
+  <circle cx="86" cy="14" r="2.7" fill={inner}></circle>
+  <path d="M80 126c6 0 9 9 9 16s-4 12-9 12-9-5-9-12 3-16 9-16z" fill={shell}></path>
+  <ellipse cx="80" cy="80" rx="55" ry="59" fill={shell}></ellipse>
+  <ellipse cx="80" cy="80" rx="42" ry="46" fill={inner}></ellipse>
+  <g fill="#21B6A3">
+    <path d="M80 38c9 0 14 6 14 14s-5 12-14 12-14-5-14-12 5-14 14-14z"></path>
+    <path d="M80 96c9 0 14 6 14 13s-5 13-14 13-14-6-14-13 5-13 14-13z"></path>
+  </g>
+  <ellipse cx="80" cy="80" rx="15" ry="14" fill="#E07A2F"></ellipse>
+</svg>
+
+<style>
+  .mark { display: block; flex: none; }
+</style>
