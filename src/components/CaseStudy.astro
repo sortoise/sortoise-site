@@ -13,7 +13,6 @@ const studies = [
     id: "d-w-jenkins",
     name: "D W Jenkins",
     trade: "Building contractor",
-    logo: "/logos/clients/d-w-jenkins.png",
     headline: "How we cut 8 to 12 hours of weekly admin.",
     problem:
       "Paid per item, so every address meant counting quantities, writing a health and safety document and gathering photo evidence by hand, all before the invoice.",
@@ -28,8 +27,6 @@ const studies = [
     id: "cavity-wall-extraction-uk",
     name: "Cavity Wall Extraction UK",
     trade: "Surveys and extraction",
-    // A light copy of the client's logo (the dark green letters recoloured cream) so it reads on the green card.
-    logo: "/logos/clients/cavity-wall-extraction-uk-light.png",
     headline: "How we built Steve a CRM that runs itself.",
     problem:
       "A paid-for CRM that felt like a dolled-up spreadsheet. Leads, proposals and chasers were all still moved by hand, and missed calls never made it in.",
@@ -65,7 +62,6 @@ const ctaHref = "#";
               tabindex={i === 0 ? 0 : -1}
               data-cs-tab={s.id}
             >
-              <span class="logo"><img src={s.logo} alt="" loading="lazy" decoding="async" /></span>
               <span class="who">
                 <span class="name">{s.name}</span>
                 <span class="trade">{s.trade}</span>
@@ -176,8 +172,8 @@ const ctaHref = "#";
   .client {
     box-sizing: border-box;
     width: 100%;
-    min-height: 76px;
-    padding: 10px 12px 10px 10px;
+    min-height: 64px;
+    padding: 14px 16px;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -192,8 +188,6 @@ const ctaHref = "#";
   .client:hover { border-color: rgba(250, 245, 224, 0.4); }
   .client[aria-selected="true"] { background: rgba(250, 245, 224, 0.14); border-color: rgba(250, 245, 224, 0.55); }
   .client:focus-visible { outline: 3px solid var(--teal-400); outline-offset: 3px; }
-  .logo { flex-shrink: 0; width: 60px; height: 54px; display: flex; align-items: center; justify-content: center; }
-  .logo img { max-width: 60px; max-height: 50px; display: block; }
   .who { display: flex; flex-direction: column; gap: 2px; }
   .name { font-family: var(--font-display); font-size: 15px; font-weight: 700; line-height: 1.15; color: var(--paper-200); }
   .trade { font-size: 13px; line-height: 1.3; color: var(--teal-200); }
