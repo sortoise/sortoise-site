@@ -7,13 +7,15 @@
 //
 // embedUrl: the video's embed address (YouTube or Vimeo "embed" link). Empty for now,
 // so the play button is there but does nothing until the address is added.
-// poster: an image shown in the frame before play. Empty for now (plain Deep 950).
+// poster / posterWebp: the image shown in the frame before play (jpg fallback plus webp).
+// Currently the placeholder still of Aaron until the real video thumbnail exists.
 interface Props {
   embedUrl?: string;
   poster?: string;
+  posterWebp?: string;
 }
 
-const { embedUrl = "", poster = "" } = Astro.props;
+const { embedUrl = "", poster = "", posterWebp = "" } = Astro.props;
 
 const chapters = [
   { time: "0:00", title: "The job that eats your week", text: "Spreadsheets, paper, WhatsApp and the owner's memory." },
@@ -30,7 +32,12 @@ const chapters = [
     </div>
 
     <div class="frame" data-embed={embedUrl}>
-      {poster && <img class="poster" src={poster} alt="" />}
+      {poster && (
+        <picture class="poster">
+          {posterWebp && <source srcset={posterWebp} type="image/webp" />}
+          <img src={poster} alt="" width="1600" height="900" loading="lazy" decoding="async" />
+        </picture>
+      )}
       <button type="button" class="play" aria-label="Play video">
         <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.5v13l11-6.5-11-6.5z" fill="#ffffff"></path></svg>
       </button>
@@ -114,7 +121,8 @@ const chapters = [
     overflow: hidden;
     display: flex; align-items: center; justify-content: center;
   }
-  .poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .poster { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .poster img { display: block; width: 100%; height: 100%; object-fit: cover; }
   .frame :global(iframe) { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
   .play {
     position: relative;
