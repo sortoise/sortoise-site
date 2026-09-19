@@ -118,12 +118,16 @@ const logos = [
       <div class="eyebrow">Powered by</div>
       <div class="reel" aria-label="Platforms we build with">
         <div class="track">
-          {logos.map((l) => (
-            <div class="logo"><img src={`/logos/${l.file}`} alt={l.name} class={l.kind} /></div>
-          ))}
-          {logos.map((l) => (
-            <div class="logo" aria-hidden="true"><img src={`/logos/${l.file}`} alt="" class={l.kind} /></div>
-          ))}
+          <div class="run">
+            {logos.map((l) => (
+              <div class="logo"><img src={`/logos/${l.file}`} alt={l.name} class={l.kind} /></div>
+            ))}
+          </div>
+          <div class="run" aria-hidden="true">
+            {logos.map((l) => (
+              <div class="logo"><img src={`/logos/${l.file}`} alt="" class={l.kind} /></div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -195,10 +199,14 @@ const logos = [
   .reel::before { left: 0; background: linear-gradient(90deg, var(--paper-200), rgba(250, 245, 224, 0)); }
   .reel::after { right: 0; background: linear-gradient(270deg, var(--paper-200), rgba(250, 245, 224, 0)); }
   .track {
-    display: flex; gap: 56px; width: max-content;
+    display: flex; width: max-content;
     animation: reel 45s linear infinite;
   }
-  /* The list is in the track twice, so sliding it half way left lands exactly on the start again. */
+  /* Each run carries its own trailing gap, so the two runs are exactly the same
+     width and sliding half way left lands on the start of the second one with no
+     seam. A gap on the track itself would leave one gap unaccounted for and the
+     reel would jump once per lap. */
+  .run { display: flex; gap: 56px; padding-right: 56px; flex-shrink: 0; }
   @keyframes reel { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   .logo { flex-shrink: 0; display: flex; align-items: center; justify-content: center; height: 44px; }
   .logo img { width: auto; display: block; }
@@ -230,7 +238,7 @@ const logos = [
     .see-all { font-size: 16px; }
     .powered { gap: 16px; padding-top: 24px; }
     .reel::before, .reel::after { width: 40px; }
-    .track { gap: 36px; }
+    .run { gap: 36px; padding-right: 36px; }
     .logo { height: 40px; }
     .logo img.mark { height: 30px; }
     .logo img.word { height: 22px; }
