@@ -1,7 +1,7 @@
 ---
 // Home services section (condensed), locked 18 Sep 2026 (Services board on the Sortoise Home canvas).
-// Light grey card (Stone 50) on the page ground. Heading and intro, four solid colour tiles in a
-// 2x2 grid (one column on phones), a "See all services" link to the Services page, then a
+// Card on the page ground in the same cream (Paper 200). Heading and intro, four solid colour tiles in a
+// 2x2 grid (one column on phones), each tile a short list of pointers, a "See all services" link, then a
 // "Powered by" strip with the platform logos scrolling continuously left.
 // Copy matches the board 1:1. Do not change without Aaron.
 // This is the condensed version of the Services page; the page expands the same four tiles.
@@ -10,25 +10,45 @@ const tiles = [
   {
     tone: "deep",
     title: "Custom software and web apps",
-    text: "Quoting, proposals and instant invoicing. Data pulled together from the platforms you already use, formatted and stored once, so the manual admin hours disappear.",
+    points: [
+      "Quoting, proposals and invoicing",
+      "Data pulled between your platforms",
+      "Formatting and storage in one place",
+      "Manual admin hours taken out",
+    ],
     icon: "software",
   },
   {
     tone: "teal",
     title: "Custom CRMs",
-    text: "Text and email that follows up leads and keeps existing customers coming back. Calendar booking, reminders, pipelines and the customer journey mapped out properly.",
+    points: [
+      "Text and email follow-up",
+      "Calendar booking and reminders",
+      "Pipelines and customer journeys",
+      "Existing customers kept warm",
+    ],
     icon: "crm",
   },
   {
     tone: "pink",
     title: "Business admin and process automation",
-    text: "Repetitive admin done by the system. Complex tasks with multiple outcomes handled by logic, and documents and compliance paperwork created for you.",
+    points: [
+      "Repetitive admin done for you",
+      "Complex tasks handled by logic",
+      "Documents created for you",
+      "Compliance paperwork in order",
+    ],
     icon: "admin",
   },
   {
     tone: "amber",
     title: "Mobile apps for the field",
-    text: "Apps for the people on site that feed straight into your database. Missed calls picked up and dropped into the CRM. Reporting and analytics on top.",
+    points: [
+      "Apps for the people on site",
+      "Straight into your database",
+      "Missed calls into the CRM",
+      "Reporting and analytics on top",
+    ],
     icon: "mobile",
   },
 ];
@@ -61,7 +81,7 @@ const logos = [
     </div>
 
     <div class="grid">
-      {tiles.map((t, i) => (
+      {tiles.map((t) => (
         <div class={`tile tile-${t.tone}`}>
           <div class="tile-top">
             {t.icon === "software" && (
@@ -76,10 +96,16 @@ const logos = [
             {t.icon === "mobile" && (
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M11 18.5h2"/><path d="M10.5 6h3"/></svg>
             )}
-            <span class="num">0{i + 1}</span>
           </div>
           <h3>{t.title}</h3>
-          <p>{t.text}</p>
+          <ul class="points">
+            {t.points.map((point) => (
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>
+                <span>{point}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       ))}
     </div>
@@ -93,10 +119,10 @@ const logos = [
       <div class="reel" aria-label="Platforms we build with">
         <div class="track">
           {logos.map((l) => (
-            <div class="logo"><img src={`/logos/${l.file}`} alt={l.name} class={l.kind} loading="lazy" /></div>
+            <div class="logo"><img src={`/logos/${l.file}`} alt={l.name} class={l.kind} /></div>
           ))}
           {logos.map((l) => (
-            <div class="logo" aria-hidden="true"><img src={`/logos/${l.file}`} alt="" class={l.kind} loading="lazy" /></div>
+            <div class="logo" aria-hidden="true"><img src={`/logos/${l.file}`} alt="" class={l.kind} /></div>
           ))}
         </div>
       </div>
@@ -110,8 +136,8 @@ const logos = [
   .card {
     max-width: var(--container-max);
     margin: 0 auto;
-    background: var(--stone-50);
-    border: 1px solid var(--stone-200);
+    background: var(--paper-200);
+    border: 1px solid var(--border-soft);
     border-radius: var(--radius-xl);
     padding: 64px 56px 56px;
     display: flex; flex-direction: column; gap: 40px;
@@ -132,17 +158,16 @@ const logos = [
   .tile-pink  { background: var(--pink-600); color: var(--pink-100); }
   .tile-amber { background: var(--amber-600); color: var(--amber-100); }
   .tile-top { display: flex; align-items: center; justify-content: space-between; }
-  .num {
-    font-family: var(--font-display);
-    font-size: var(--text-micro); font-weight: 600;
-    letter-spacing: var(--tracking-caps); text-transform: uppercase;
-  }
   .tile h3 {
     margin: 0;
     font-size: 24px; line-height: 1.12; letter-spacing: var(--tracking-tight);
     color: #ffffff;
   }
-  .tile p { margin: 0; font-size: 16px; line-height: var(--leading-body); color: var(--paper-200); }
+  /* The tick takes the tile's own accent (currentColor); the words stay Paper 200. */
+  .points { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .points li { display: flex; gap: 10px; align-items: flex-start; font-size: 16px; line-height: var(--leading-body); }
+  .points li svg { flex-shrink: 0; margin-top: 4px; }
+  .points li span { color: var(--paper-200); }
 
   .link-row { display: flex; justify-content: flex-end; align-items: center; margin-top: -16px; }
   .see-all {
@@ -158,15 +183,15 @@ const logos = [
   .powered {
     display: flex; flex-direction: column; gap: 20px;
     padding-top: 32px;
-    border-top: 1px solid var(--stone-200);
+    border-top: 1px solid var(--border-soft);
   }
   .reel { position: relative; overflow: hidden; width: 100%; }
   /* Fade at both edges so the logos slide in and out rather than cut off. */
   .reel::before, .reel::after {
     content: ""; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 1; pointer-events: none;
   }
-  .reel::before { left: 0; background: linear-gradient(90deg, var(--stone-50), rgba(248, 249, 249, 0)); }
-  .reel::after { right: 0; background: linear-gradient(270deg, var(--stone-50), rgba(248, 249, 249, 0)); }
+  .reel::before { left: 0; background: linear-gradient(90deg, var(--paper-200), rgba(250, 245, 224, 0)); }
+  .reel::after { right: 0; background: linear-gradient(270deg, var(--paper-200), rgba(250, 245, 224, 0)); }
   .track {
     display: flex; gap: 56px; width: max-content;
     animation: reel 45s linear infinite;
@@ -189,7 +214,9 @@ const logos = [
     .tile { padding: 24px 22px 26px; gap: 14px; }
     .tile-top svg { width: 28px; height: 28px; }
     .tile h3 { font-size: 21px; line-height: 1.15; }
-    .tile p { font-size: 15px; line-height: 1.5; }
+    .points { gap: 8px; }
+    .points li { gap: 9px; font-size: 15px; line-height: 1.5; }
+    .points li svg { width: 15px; height: 15px; }
     .link-row { margin-top: -8px; }
     .see-all { font-size: 16px; }
     .powered { gap: 16px; padding-top: 24px; }
