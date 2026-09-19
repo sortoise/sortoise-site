@@ -1,6 +1,93 @@
 ---
-// Holding page. Replace this file with the real page when it is built.
-import ComingSoonPage from "../components/ComingSoonPage.astro";
+// The Terms and Conditions page. The words live in the sections list below, so the page can be
+// reworded without touching the layout. LegalPage draws the card, the contents rail and the page.
+import LegalPage from "../components/LegalPage.astro";
+
+const sections = [
+    {
+      "heading": "Who we are",
+      "paras": [
+        "Sortoise is a small software workshop based in South Wales. Sortoise is a trading name used by Aaron Davies and Luke Jenkins, who run the business together in partnership. Sortoise is not a registered company, so there is no company number or registered office to give you. You can reach us at <a href=\"mailto:sortoisesolutions@gmail.com\">sortoisesolutions@gmail.com</a>, or by post at 17 Heol Beili Glas, Llanelli, SA14 8DT."
+      ]
+    },
+    {
+      "heading": "What these terms are for",
+      "paras": [
+        "These terms cover your use of this website. They are not the terms of any work we do for you. If you hire us, that work is covered by a separate written agreement that we both sign, and where the two documents disagree, that agreement wins.",
+        "By using this site you accept these terms. If you do not accept them, please stop using the site."
+      ]
+    },
+    {
+      "heading": "What is on the site",
+      "paras": [
+        "Everything here is written to explain what we do and to help you decide whether to talk to us. It is general information, not advice for your particular business, and it is not an offer that you can accept to form a contract.",
+        "The case studies describe real work for named clients, published with their permission. They are an account of what happened in those businesses and not a promise that the same thing would happen in yours."
+      ]
+    },
+    {
+      "heading": "Discovery calls",
+      "paras": [
+        "Discovery calls are free and neither side is committed by having one. Nothing said on a call, in an email or on this site creates a contract between us. We only have an agreement once we have both signed one in writing."
+      ]
+    },
+    {
+      "heading": "Work we do for clients",
+      "paras": [
+        "Prices, timescales, what gets built, how changes are handled, how support works and when payment is due are all set out in the written agreement for that project, not here.",
+        "Where we build a tool for you, Sortoise keeps ownership of the underlying code and you have a licence to use that tool for as long as your agreement with us is running. Your own business data stays yours throughout, and you can take a copy of it whenever you ask. The detail of this sits in the project agreement."
+      ]
+    },
+    {
+      "heading": "Our content",
+      "paras": [
+        "The words, images, layout and design on this site belong to us, as do the Sortoise name and the tortoise mark. You are welcome to read the site, print a page for your own use and share a link to it. You may not copy any of it into your own website or marketing, or use it commercially, without asking us first.",
+        "Other companies&#x27; names and logos appear on this site to describe the platforms we build with, or because a client has agreed to be named. They belong to their owners, and showing them does not imply that those companies endorse us."
+      ]
+    },
+    {
+      "heading": "Links to other sites",
+      "paras": [
+        "Some links take you off this site. We do not control what is on the other end and we are not responsible for it, so treat those sites on their own terms."
+      ]
+    },
+    {
+      "heading": "The site being available",
+      "paras": [
+        "We try to keep this site up and correct, but we do not promise that it will always be available, or that it will be free of errors or interruptions. We can change, suspend or withdraw any part of it without notice."
+      ]
+    },
+    {
+      "heading": "Where our responsibility ends",
+      "paras": [
+        "Nothing in these terms limits our responsibility for death or personal injury caused by our negligence, for fraud, or for anything else that cannot be limited by law.",
+        "Beyond that, we are not responsible for any loss you suffer through relying on information on this site, including lost profit, lost business, lost savings or lost data. If you are using this site as a consumer rather than for business, your statutory rights are not affected by anything here."
+      ]
+    },
+    {
+      "heading": "Your privacy",
+      "paras": [
+        "Our <a href=\"/privacy-policy\">privacy policy</a> explains what this site collects and what we do with it. Please read it alongside these terms."
+      ]
+    },
+    {
+      "heading": "Changes to these terms",
+      "paras": [
+        "We may update these terms from time to time. The date at the top tells you when they were last changed, and the version on this page is the one that applies."
+      ]
+    },
+    {
+      "heading": "Law and courts",
+      "paras": [
+        "These terms and any dispute arising from them are governed by the law of England and Wales, and the courts of England and Wales have exclusive jurisdiction over them."
+      ]
+    }
+  ];
 ---
 
-<ComingSoonPage name="Terms and conditions" />
+<LegalPage
+  title="Terms and Conditions"
+  updated="Last updated 19 September 2026."
+  pageTitle="Terms and conditions | Sortoise"
+  description="The terms that cover your use of the Sortoise website."
+  sections={sections}
+/>

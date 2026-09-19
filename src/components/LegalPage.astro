@@ -1,0 +1,158 @@
+---
+// The shared layout for the Privacy Policy and Terms pages.
+// Same nav, page ground and footer as Home, with one white card inside the 1120 cap.
+// Inside the card: the title, the date, a hairline, then a contents rail on the left
+// and a narrow reading column on the right. The rail disappears on a narrow screen.
+import PageShell from "../layouts/PageShell.astro";
+import SiteNav from "./SiteNav.astro";
+import Footer from "./Footer.astro";
+
+interface Section {
+  heading: string;
+  paras: string[];
+}
+
+interface Props {
+  title: string;
+  updated: string;
+  pageTitle: string;
+  description: string;
+  sections: Section[];
+}
+
+const { title, updated, pageTitle, description, sections } = Astro.props;
+
+// Turns a heading into the id the contents rail links to, e.g. "Your rights" becomes "your-rights".
+const slug = (text: string) =>
+  text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+---
+
+<PageShell title={pageTitle} description={description}>
+  <div class="page-ground">
+    <div class="nav-wrap">
+      <SiteNav />
+    </div>
+    <main class="wrap">
+      <article class="card">
+        <header class="head">
+          <h1>{title}</h1>
+          <p class="updated">{updated}</p>
+        </header>
+        <div class="rule"></div>
+        <div class="cols">
+          <nav class="rail" aria-label="On this page">
+            <p class="rail-label">On this page</p>
+            {sections.map((s) => <a href={`#${slug(s.heading)}`}>{s.heading}</a>)}
+          </nav>
+          <div class="doc">
+            {
+              sections.map((s) => (
+                <section>
+                  <h2 id={slug(s.heading)}>{s.heading}</h2>
+                  {s.paras.map((p) => <p set:html={p} />)}
+                </section>
+              ))
+            }
+          </div>
+        </div>
+      </article>
+    </main>
+  </div>
+  <Footer />
+</PageShell>
+
+<style>
+  .page-ground { width: 100%; }
+  .nav-wrap { max-width: 1240px; margin: 0 auto; padding: 20px 60px 0; }
+  .wrap { padding: 96px 24px 140px; }
+
+  .card {
+    max-width: 1120px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding: 72px 88px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-xl);
+  }
+
+  .head h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 1.06;
+    letter-spacing: -0.025em;
+    color: var(--deep-700);
+  }
+  .updated {
+    margin: 14px 0 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--stone-300);
+  }
+  .rule { height: 1px; background: var(--border-soft); margin-top: 40px; }
+
+  .cols { display: flex; gap: 72px; padding-top: 44px; }
+
+  .rail { width: 208px; flex: none; align-self: flex-start; position: sticky; top: 32px; }
+  .rail-label {
+    margin: 0 0 12px;
+    font-family: var(--font-display);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--stone-300);
+  }
+  .rail a {
+    display: block;
+    padding: 6px 0;
+    font-size: 14.5px;
+    line-height: 1.45;
+    color: var(--stone-500);
+    text-decoration: none;
+  }
+  .rail a:hover { color: var(--deep-600); text-decoration: underline; text-underline-offset: 3px; }
+
+  .doc { width: 664px; flex: none; }
+  .doc h2 {
+    margin: 40px 0 14px;
+    font-family: var(--font-display);
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--deep-700);
+    scroll-margin-top: 32px;
+  }
+  .doc section:first-child h2 { margin-top: 0; }
+  .doc p {
+    margin: 0 0 18px;
+    font-size: 17px;
+    line-height: 1.72;
+    color: var(--stone-700);
+  }
+  .doc p:last-child { margin-bottom: 0; }
+
+  @media (max-width: 1080px) {
+    .card { padding: 56px 40px; }
+    .cols { gap: 48px; }
+    .doc { width: auto; flex: 1 1 auto; min-width: 0; }
+  }
+
+  @media (max-width: 900px) {
+    .rail { display: none; }
+  }
+
+  @media (max-width: 820px) {
+    .nav-wrap { padding: 12px 16px 0; }
+    .wrap { padding: 72px 16px 140px; }
+    .card { padding: 36px 22px; border-radius: 20px; }
+    .head h1 { font-size: 32px; }
+    .rule { margin-top: 28px; }
+    .cols { padding-top: 30px; }
+    .doc h2 { margin: 34px 0 14px; font-size: 19px; }
+    .doc p { font-size: 16.5px; }
+  }
+</style>

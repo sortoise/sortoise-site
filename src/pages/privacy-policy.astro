@@ -1,6 +1,88 @@
 ---
-// Holding page. Replace this file with the real page when it is built.
-import ComingSoonPage from "../components/ComingSoonPage.astro";
+// The Privacy Policy page. The words live in the sections list below, so the page can be
+// reworded without touching the layout. LegalPage draws the card, the contents rail and the page.
+import LegalPage from "../components/LegalPage.astro";
+
+const sections = [
+    {
+      "heading": "Who we are",
+      "paras": [
+        "Sortoise is a small software workshop based in South Wales. Sortoise is a trading name used by Aaron Davies and Luke Jenkins, who run the business together in partnership. Sortoise is not a registered company, so there is no company number or registered office to give you.",
+        "Between us we are the data controller for the information described below, which means we are the ones who decide why it is held and what happens to it. You can reach us at <a href=\"mailto:sortoisesolutions@gmail.com\">sortoisesolutions@gmail.com</a>, or by post at 17 Heol Beili Glas, Llanelli, SA14 8DT."
+      ]
+    },
+    {
+      "heading": "What this policy covers",
+      "paras": [
+        "This policy covers this website and the emails and calls that come out of it. If you go on to become a client, the work we do for you is covered by the written agreement we sign with you, and by a separate data processing agreement wherever we handle personal information that belongs to your business."
+      ]
+    },
+    {
+      "heading": "What the website collects today",
+      "paras": [
+        "This website is deliberately plain. There is no contact form, no analytics, no advertising tags and no comments section, and the site itself does not set a single cookie. Nothing on it asks you for your name or your email address.",
+        "Two things do still happen in the background, and you should know about them.",
+        "Our typeface is loaded from Google Fonts, so when a page opens your browser asks Google&#x27;s servers for the font file. To do that it has to tell Google your IP address along with the usual details a browser sends, such as the device and browser you are using. Google is based in the United States, so this involves information leaving the UK. Google&#x27;s own privacy notice at <a href=\"https://policies.google.com/privacy\" target=\"_blank\" rel=\"noopener\">policies.google.com/privacy</a> explains what it does with it.",
+        "The site is hosted by Netlify, and like nearly every web host Netlify keeps server logs of the requests it receives. Those logs include IP addresses, the pages that were asked for and the time they were asked for. They exist so that the site stays up and stays secure, and we do not use them to build any picture of individual visitors.",
+        "For both of these our lawful basis is legitimate interests, specifically running a website that works and is protected from abuse."
+      ]
+    },
+    {
+      "heading": "If you email us",
+      "paras": [
+        "If you email us we receive your email address, your name if you give it, and whatever you choose to write. We keep that email so we can reply and so we have a record of what was discussed. Our email runs on Gmail, which is provided by Google.",
+        "Our lawful basis is taking steps at your request before entering into a contract, together with our legitimate interest in keeping a record of our business conversations. We keep enquiry emails for two years from our last contact with you. If you become a client they are kept with your project records instead, for six years after the work ends, which matches how long we have to keep our business records."
+      ]
+    },
+    {
+      "heading": "What is planned but is not here yet",
+      "paras": [
+        "Four things are planned for this site. None of them are running today, and this policy will be updated before any of them goes live.",
+        "Booking will move to Calendly so that you can put a free discovery call in the diary yourself. When that happens, the name, email address and any details you type into the booking form will go to Calendly, which is a United States company acting on our instructions, as well as to us.",
+        "A contact or enquiry form is planned, most likely through Netlify Forms, which would send us what you type in the same way an email does.",
+        "Google Analytics is planned, so that we can see which pages are actually read.",
+        "Advertising tags from Google Ads and Meta are planned, so that we can tell whether an advert brought anyone here.",
+        "The last two set cookies and can only run with your agreement, so a cookies banner will arrive at the same time they do."
+      ]
+    },
+    {
+      "heading": "Cookies",
+      "paras": [
+        "Today this site sets no cookies at all. Google Fonts does not set a cookie either, although it does see your IP address as described above. When analytics or advertising arrives you will be asked first, and nothing beyond what is strictly necessary will run until you say yes."
+      ]
+    },
+    {
+      "heading": "Who else sees your information",
+      "paras": [
+        "We do not sell your information and we never share it for anyone else&#x27;s marketing. The only companies that touch it are the ones that run our tools: Netlify for hosting, Google for our fonts and our email, and in time Calendly for bookings. Each of them handles it under our instructions or under their own published terms, and nothing goes any further unless the law requires it."
+      ]
+    },
+    {
+      "heading": "Information leaving the UK",
+      "paras": [
+        "Netlify, Google and Calendly are United States companies, so information may be stored or looked at outside the UK. Where that happens we rely on the approved safeguards for UK transfers, which for these providers means the UK extension to the EU-US Data Privacy Framework or the International Data Transfer Addendum to the standard contractual clauses."
+      ]
+    },
+    {
+      "heading": "Your rights",
+      "paras": [
+        "Under UK data protection law you can ask us for a copy of the information we hold about you, ask us to correct it if it is wrong, ask us to delete it, object to us using it, ask us to limit what we do with it, and ask for it in a form you can take elsewhere. Write to <a href=\"mailto:sortoisesolutions@gmail.com\">sortoisesolutions@gmail.com</a> and we will reply within one month.",
+        "If you are not happy with how we have handled your information you can complain to the Information Commissioner&#x27;s Office at <a href=\"https://ico.org.uk\" target=\"_blank\" rel=\"noopener\">ico.org.uk</a>, or on 0303 123 1113. We would rather you came to us first so we can put it right."
+      ]
+    },
+    {
+      "heading": "Changes to this policy",
+      "paras": [
+        "When the site changes, this policy changes with it. The date at the top tells you when it was last updated."
+      ]
+    }
+  ];
 ---
 
-<ComingSoonPage name="Privacy policy" />
+<LegalPage
+  title="Privacy Policy"
+  updated="Last updated 19 September 2026."
+  pageTitle="Privacy policy | Sortoise"
+  description="What this website collects, who else sees it, and the rights you have over it."
+  sections={sections}
+/>
