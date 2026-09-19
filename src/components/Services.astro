@@ -8,7 +8,7 @@
 
 const tiles = [
   {
-    tone: "deep",
+    tone: "dark",
     title: "Custom software and web apps",
     points: [
       "Quoting, proposals and invoicing",
@@ -19,7 +19,7 @@ const tiles = [
     icon: "software",
   },
   {
-    tone: "teal",
+    tone: "light",
     title: "Custom CRMs",
     points: [
       "Text and email follow-up",
@@ -30,7 +30,7 @@ const tiles = [
     icon: "crm",
   },
   {
-    tone: "pink",
+    tone: "light",
     title: "Business admin and process automation",
     points: [
       "Repetitive admin done for you",
@@ -41,7 +41,7 @@ const tiles = [
     icon: "admin",
   },
   {
-    tone: "amber",
+    tone: "dark",
     title: "Mobile apps for the field",
     points: [
       "Apps for the people on site",
@@ -81,8 +81,8 @@ const logos = [
     </div>
 
     <div class="grid">
-      {tiles.map((t) => (
-        <div class={`tile tile-${t.tone}`}>
+      {tiles.map((t, i) => (
+        <div class={`tile tile-${t.tone} tile-at-${i + 1}`}>
           <div class="tile-top">
             {t.icon === "software" && (
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5v-11z"/><path d="M4 9h16"/><path d="M9.5 13l-2 2 2 2"/><path d="M14.5 13l2 2-2 2"/></svg>
@@ -153,23 +153,23 @@ const logos = [
     padding: 30px 30px 32px;
     display: flex; flex-direction: column; gap: 18px;
   }
-  .tile-deep  { background: var(--deep-950); color: var(--teal-300); }
-  .tile-teal  { background: var(--deep-600); color: var(--teal-200); }
-  .tile-pink  { background: var(--pink-400); color: var(--deep-950); }
-  .tile-amber { background: var(--amber-500); color: var(--deep-950); }
+  /* Two tones only: the brand teal card and the light Teal 200 card from Who we are.
+     The icon and the ticks are currentColor, so the tone carries them. */
+  .tile-dark  { background: var(--deep-600); color: var(--teal-200); }
+  .tile-light { background: var(--teal-200); color: var(--deep-600); }
   .tile-top { display: flex; align-items: center; justify-content: space-between; }
   .tile h3 {
     margin: 0;
     font-size: 24px; line-height: 1.12; letter-spacing: var(--tracking-tight);
     color: #ffffff;
   }
-  .tile-pink h3, .tile-amber h3 { color: var(--deep-950); }
-  /* The tick takes the tile's own accent (currentColor); the words stay Paper 200. */
+  .tile-light h3 { color: var(--deep-950); }
+  /* The tick takes the tile's own accent (currentColor); the words sit under it. */
   .points { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
   .points li { display: flex; gap: 10px; align-items: flex-start; font-size: 16px; line-height: var(--leading-body); }
   .points li svg { flex-shrink: 0; margin-top: 4px; }
   .points li span { color: var(--paper-200); }
-  .tile-pink .points li span, .tile-amber .points li span { color: var(--deep-950); }
+  .tile-light .points li span { color: var(--deep-800); }
 
   .link-row { display: flex; justify-content: flex-end; align-items: center; margin-top: -16px; }
   .see-all {
@@ -213,6 +213,13 @@ const logos = [
     h2 { font-size: 32px; }
     .intro { font-size: 16px; line-height: 1.5; }
     .grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+    /* One column, so the diagonal would stack the two light tiles together. */
+    .tile-at-3 { background: var(--deep-600); color: var(--teal-200); }
+    .tile-at-3 h3 { color: #ffffff; }
+    .tile-at-3 .points li span { color: var(--paper-200); }
+    .tile-at-4 { background: var(--teal-200); color: var(--deep-600); }
+    .tile-at-4 h3 { color: var(--deep-950); }
+    .tile-at-4 .points li span { color: var(--deep-800); }
     .tile { padding: 24px 22px 26px; gap: 14px; }
     .tile-top svg { width: 28px; height: 28px; }
     .tile h3 { font-size: 21px; line-height: 1.15; }
