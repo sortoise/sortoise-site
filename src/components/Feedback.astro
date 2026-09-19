@@ -1,0 +1,314 @@
+---
+// Home feedback section, locked 19 Sep 2026 (Feedback board on the Sortoise Home canvas).
+// Bare on the page ground, no card. One review at a time, centred:
+//   headshot in a circle, five stars, the review, the client's name, and a Read more link
+//   that grows the same review in place. An arrow each side of the review moves to the next one,
+//   and it also moves on by itself every 8 seconds.
+// Steve's words are his own, unchanged. Wayne's are a placeholder until he sends his review.
+// Do not change without Aaron.
+
+const reviews = [
+  {
+    id: "steve",
+    name: "Steve",
+    company: "Cavity Wall Extraction UK",
+    photo: "/images/steve-cavity-wall.webp",
+    photoFallback: "/images/steve-cavity-wall.jpg",
+    alt: "Steve, Cavity Wall Extraction UK",
+    // The opening shows first. The rest opens behind Read more.
+    opening:
+      "After years running different businesses, one thing I have always wanted is one system where I can run all operations from. We've tried multiple CRMs in the past like HubSpot and Pipedrive to achieve this but it's never ticked all the boxes",
+    rest: [
+      "What Aaron and Luke have built does everything we want and more, and we can finally do everything from one application. Our leads land in the CRM, email and text reminders are sent from within the CRM just by clicking a button, and customers are chased automatically.",
+      "The CRM connects with a mobile app the lads built where I can do my surveys. I can generate quotes from within the app, and when the customer signs and agrees, it feeds back into the CRM. Couldn't ask for any more.",
+      "The service and aftercare was excellent, and anything I need I can just WhatsApp the lads and it's sorted straight away.",
+    ],
+    placeholder: false,
+  },
+  {
+    id: "wayne",
+    name: "Wayne",
+    company: "D W Jenkins, building contractor",
+    photo: "",
+    photoFallback: "",
+    alt: "",
+    opening:
+      "[Placeholder, not a real quote. The opening two sentences of Wayne's review sit here, in his own words, once he sends them",
+    rest: ["[Placeholder. The rest of Wayne's review, in his own words, once he sends it.]"],
+    placeholder: true,
+  },
+];
+
+const seconds = 8;
+---
+
+<section id="feedback" class="feedback" data-seconds={seconds}>
+  <h2>Feedback from our clients</h2>
+
+  <div class="stage">
+    {reviews.map((r, i) => (
+      <article class="review" data-review={r.id} hidden={i !== 0}>
+        {r.placeholder ? (
+          <span class="photo photo-placeholder" role="img" aria-label="Placeholder for Wayne's photo">
+            <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="8.5" r="3.8" />
+              <path d="M4.5 20c1.2-4 4-5.6 7.5-5.6s6.3 1.6 7.5 5.6" />
+            </svg>
+          </span>
+        ) : (
+          <picture>
+            <source srcset={r.photo} type="image/webp" />
+            <img class="photo" src={r.photoFallback} alt={r.alt} width="108" height="108" decoding="async" />
+          </picture>
+        )}
+
+        <div class="stars" role="img" aria-label="5 out of 5 stars">
+          {[0, 1, 2, 3, 4].map(() => (
+            <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2.6l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.5l-5.9 3.1 1.2-6.5L2.5 9.5l6.6-.9z" />
+            </svg>
+          ))}
+        </div>
+
+        <div class="quote-row">
+          <button type="button" class="arrow arrow-prev" data-step="-1" aria-label="Previous review">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M19 12H5" /><path d="M11 6l-6 6 6 6" />
+            </svg>
+          </button>
+
+          <blockquote class="quote">
+            <p class="short">&ldquo;{r.opening}&hellip;&rdquo;</p>
+            <div class="full" hidden>
+              <p>&ldquo;{r.opening}.</p>
+              {r.rest.map((p, j) => (
+                <p>{j === r.rest.length - 1 ? p + "”" : p}</p>
+              ))}
+            </div>
+          </blockquote>
+
+          <button type="button" class="arrow arrow-next" data-step="1" aria-label="Next review">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14" /><path d="M13 6l6 6-6 6" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="who">
+          <span class="name">{r.name}</span>
+          <span class="company">{r.company}</span>
+        </div>
+
+        <div class="more">
+          <button type="button" class="more-btn" aria-expanded="false">Read more</button>
+        </div>
+
+        <div class="arrows-phone">
+          <button type="button" class="arrow" data-step="-1" aria-label="Previous review">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M19 12H5" /><path d="M11 6l-6 6 6 6" />
+            </svg>
+          </button>
+          <button type="button" class="arrow" data-step="1" aria-label="Next review">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14" /><path d="M13 6l6 6-6 6" />
+            </svg>
+          </button>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<script>
+  // Shows one review at a time. The arrows move between them, Read more grows the review in place,
+  // and it moves on by itself unless the reader is hovering, tabbing through it, or reading an open one.
+  document.querySelectorAll<HTMLElement>(".feedback").forEach((section) => {
+    const items = Array.from(section.querySelectorAll<HTMLElement>(".review"));
+    if (items.length < 2 && !items.length) return;
+    let at = 0;
+    let held = false;
+    let ticks = 0;
+
+    const collapse = (el: HTMLElement) => {
+      const btn = el.querySelector<HTMLButtonElement>(".more-btn");
+      const full = el.querySelector<HTMLElement>(".full");
+      const short = el.querySelector<HTMLElement>(".short");
+      if (!btn || !full || !short) return;
+      full.hidden = true;
+      short.hidden = false;
+      btn.textContent = "Read more";
+      btn.setAttribute("aria-expanded", "false");
+    };
+
+    const show = (next: number) => {
+      at = (next + items.length) % items.length;
+      ticks = 0;
+      items.forEach((el, i) => {
+        if (i !== at) collapse(el);
+        el.hidden = i !== at;
+        if (i === at) {
+          el.classList.remove("slide-in");
+          void el.offsetWidth;
+          el.classList.add("slide-in");
+        }
+      });
+    };
+
+    section.querySelectorAll<HTMLButtonElement>(".arrow").forEach((btn) => {
+      btn.addEventListener("click", () => show(at + Number(btn.dataset.step)));
+    });
+
+    items.forEach((el) => {
+      const btn = el.querySelector<HTMLButtonElement>(".more-btn");
+      const full = el.querySelector<HTMLElement>(".full");
+      const short = el.querySelector<HTMLElement>(".short");
+      if (!btn || !full || !short) return;
+      btn.addEventListener("click", () => {
+        const open = full.hidden;
+        full.hidden = !open;
+        short.hidden = open;
+        btn.textContent = open ? "Read less" : "Read more";
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+        ticks = 0;
+      });
+    });
+
+    section.addEventListener("mouseenter", () => { held = true; });
+    section.addEventListener("mouseleave", () => { held = false; });
+    section.addEventListener("focusin", () => { held = true; });
+    section.addEventListener("focusout", () => { held = false; });
+
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (still) return;
+    const limit = Number(section.dataset.seconds) || 8;
+    setInterval(() => {
+      const openHere = !items[at].querySelector<HTMLElement>(".full")?.hidden;
+      if (held || openHere || !section.isConnected) return;
+      ticks += 1;
+      if (ticks >= limit) show(at + 1);
+    }, 1000);
+  });
+</script>
+
+<style>
+  /* This section brings its own 96px top padding (see the section spacing convention). */
+  .feedback {
+    padding: 96px 24px 0;
+    font-family: var(--font-body);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  h2 {
+    max-width: var(--container-max);
+    width: 100%;
+    margin: 0 auto;
+    font-size: 44px;
+    line-height: 1.06;
+    letter-spacing: -0.025em;
+    text-align: center;
+    color: var(--ground-text, var(--deep-700));
+  }
+
+  .stage { max-width: var(--container-max); width: 100%; margin: 0 auto; }
+  .review { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .review[hidden] { display: none; }
+  .slide-in { animation: fb-in var(--dur-slow, 0.5s) var(--ease-out, ease) both; }
+  @keyframes fb-in {
+    from { opacity: 0; transform: translateX(22px); }
+    to { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .slide-in { animation: none; }
+  }
+
+  .photo {
+    display: block;
+    flex-shrink: 0;
+    width: 108px;
+    height: 108px;
+    border-radius: var(--radius-pill);
+    object-fit: cover;
+  }
+  .photo-placeholder {
+    box-sizing: border-box;
+    border: 1.5px dashed var(--stone-400);
+    color: var(--stone-500);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .stars { display: flex; gap: 4px; }
+  .stars svg { flex-shrink: 0; fill: var(--amber-500); }
+
+  .quote-row { display: flex; align-items: center; justify-content: center; gap: 18px; width: 100%; }
+  .quote { max-width: 700px; margin: 0; }
+  .quote p {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.45;
+    text-align: center;
+    color: var(--ground-text, var(--deep-700));
+  }
+  .full { display: flex; flex-direction: column; gap: 16px; }
+  .full[hidden], .short[hidden] { display: none; }
+
+  .arrow {
+    box-sizing: border-box;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(10, 61, 54, 0.22);
+    background: transparent;
+    color: var(--deep-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+  }
+  .arrow:hover { border-color: rgba(10, 61, 54, 0.5); background: rgba(10, 61, 54, 0.05); }
+  .arrow:focus-visible { outline: 3px solid var(--deep-600); outline-offset: 3px; }
+
+  .who { display: flex; flex-direction: column; gap: 3px; text-align: center; }
+  .name { font-family: var(--font-display); font-size: 17px; font-weight: 700; line-height: 1.2; color: var(--ground-text, var(--deep-700)); }
+  .company { font-size: 14px; line-height: 1.35; color: var(--ground-text-soft, var(--stone-700)); }
+
+  .more { display: flex; justify-content: center; }
+  .more-btn {
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14.5px;
+    font-weight: 400;
+    color: var(--deep-600);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+  .more-btn:hover { color: var(--deep-500); }
+  .more-btn:focus-visible { outline: 3px solid var(--deep-600); outline-offset: 3px; }
+
+  .arrows-phone { display: none; }
+
+  @media (max-width: 820px) {
+    /* At phone width the arrows either side would squeeze the review too narrow, so they move below it. */
+    .feedback { padding: 96px 16px 0; gap: 20px; }
+    h2 { font-size: 30px; line-height: 1.12; letter-spacing: -0.02em; }
+    .review { gap: 14px; }
+    .photo, .photo-placeholder { width: 96px; height: 96px; }
+    .photo-placeholder svg { width: 44px; height: 44px; }
+    .quote-row .arrow { display: none; }
+    .quote-row { gap: 0; }
+    .quote p { font-size: 18px; line-height: 1.5; }
+    .arrows-phone { display: flex; align-items: center; justify-content: center; gap: 20px; padding-top: 2px; }
+  }
+</style>
