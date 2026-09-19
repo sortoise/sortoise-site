@@ -1,105 +1,98 @@
 ---
-// Home hero, locked 18 Sep 2026. Split layout: eyebrow and headline left,
-// sub, CTA and underliner right, bottom-aligned. Collapses to one column under 820px.
-// Copy and colours match the Hero board on the Sortoise Home canvas. Do not change without Aaron.
-interface Props {
-  eyebrow?: string;
-  headline?: string;
-  sub?: string;
-  cta?: { label: string; href: string };
-  note?: string;
-  noteHref?: string;
-}
-
-const {
-  eyebrow = "CUSTOM SYSTEMS",
-  headline = "Helping businesses do more with less",
-  sub = "Custom software that sorts your workflow and takes the day-to-day tasks off your team.",
-  cta = { label: "Get It Sorted", href: "#" },
-  note = "Not ready? See what we've built",
-  noteHref = "#case-study",
-} = Astro.props;
+// Home hero, redesigned 19 Sep 2026. One centred headline that types itself out and loops:
+// "Do more" "With Less" on two lines, a pause, wiped, then "Get It Sorted," "With Sortoise.",
+// a pause, wiped, and round again. No eyebrow, no button, no underliner (Aaron removed them).
+// If the visitor has asked their device for less motion, the two lines simply sit there.
 ---
 
 <section class="hero">
-  <div class="split">
-    <div class="top">
-      <div class="eyebrow hero-eyebrow">{eyebrow}</div>
-      <h1>{headline}</h1>
-    </div>
-    <div class="bottom">
-      <p class="sub">{sub}</p>
-      <div class="actions">
-        <a href={cta.href} class="cta">{cta.label}</a>
-      </div>
-      <p class="note"><a href={noteHref}>{note}</a></p>
-    </div>
-  </div>
+  <h1 class="typed" aria-label="Do more with less. Get It Sorted, With Sortoise."
+    ><span class="out" aria-hidden="true">Do more
+With Less</span><span class="caret" aria-hidden="true"></span></h1>
 </section>
 
 <style>
   .hero {
     background: transparent;
     padding: 88px 24px 104px;
-    text-align: left;
+    text-align: center;
     font-family: var(--font-body);
   }
-  .split {
+  .typed {
     max-width: var(--container-max);
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    gap: 32px 64px;
-    align-items: end;
+    font-size: clamp(44px, 7.2vw, 96px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--deep-700);
+    white-space: pre-wrap;
+    /* Room for two lines, so the page does not jump while the words type in and out. */
+    min-height: 2.1em;
   }
-  .hero-eyebrow { margin-bottom: 0; color: var(--teal-600); }
-  h1 {
-    font-size: var(--text-hero);
-    margin: 16px 0 0;
-    text-wrap: balance;
-  }
-  .bottom {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding-bottom: 6px;
-  }
-  .sub {
-    font-size: var(--text-lead);
-    color: var(--text-soft);
-    max-width: 600px;
-    margin: 0;
-    text-wrap: pretty;
-  }
-  .actions {
-    display: flex; flex-wrap: wrap; gap: 12px;
-    justify-content: flex-start;
-    margin-top: 28px;
-  }
-  .cta {
-    display: inline-flex; align-items: center;
-    padding: 14px 30px;
-    border-radius: var(--radius-pill);
+  .caret {
+    display: inline-block;
+    width: 0.06em;
+    height: 0.9em;
+    margin-left: 0.04em;
+    vertical-align: -0.08em;
     background: var(--pink-500);
-    color: var(--deep-950);
-    font-family: var(--font-display);
-    font-weight: 700; font-size: 16px;
-    text-decoration: none;
-    transition: background var(--dur-fast) var(--ease-out);
+    animation: blink 1s steps(2) infinite;
   }
-  .cta:hover { background: var(--pink-400); color: var(--deep-950); }
-  .note {
-    font-size: var(--text-sm);
-    color: var(--text-faint);
-    margin: 18px 0 0;
-  }
-  .note a {
-    font-weight: 600;
-    text-decoration: underline;
-    text-decoration-color: var(--text-link);
+  @keyframes blink { to { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .caret { display: none; }
   }
   @media (max-width: 820px) {
     .hero { padding: 56px 20px 72px; }
-    .split { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   }
 </style>
+
+<script>
+  // Types the headline out letter by letter, on a loop.
+  const out = document.querySelector<HTMLElement>(".hero .out");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (out && !reduce) {
+    const first = ["Do more", "With Less"];
+    const second = ["Get It Sorted,", "With Sortoise."];
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+    const type = async (lines: string[], perChar: number) => {
+      out.textContent = "";
+      for (let i = 0; i < lines.length; i++) {
+        for (const ch of lines[i]) {
+          out.textContent += ch;
+          await sleep(perChar);
+        }
+        if (i < lines.length - 1) {
+          out.textContent += "\n";
+          await sleep(220);
+        }
+      }
+    };
+
+    const wipe = async () => {
+      while (out.textContent && out.textContent.length) {
+        out.textContent = out.textContent.slice(0, -1);
+        await sleep(18);
+      }
+    };
+
+    const loop = async () => {
+      // The page loads with the two lines already showing, so wipe those first.
+      await sleep(1800);
+      await wipe();
+      while (true) {
+        await sleep(300);
+        await type(second, 70);
+        await sleep(2200);
+        await wipe();
+        await sleep(400);
+        await type(first, 95);
+        await sleep(1800);
+        await wipe();
+      }
+    };
+    loop();
+  }
+</script>
