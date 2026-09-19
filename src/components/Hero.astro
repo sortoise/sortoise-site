@@ -6,7 +6,8 @@
 //   2. the sub line types underneath it and holds
 //   3. five stars pop in one at a time
 //   4. "A five star service" types under them
-//   5. the way down fades in at the foot of the screen
+//   5. the Get It Sorted button pops in
+//   6. the way down fades in at the foot of the screen
 // Nothing wipes and nothing loops. "Get It Sorted, With Sortoise." is deliberately not
 // in the hero, Aaron's call on 19 Sep.
 //
@@ -24,6 +25,13 @@
 // see on load, so the hero ran off the bottom of the screen, the content sat low and
 // the way down was pushed out of sight. svh is the smaller, always visible height.
 // The plain vh line above each one is the fallback for browsers that predate svh.
+// ctaHref: where Get It Sorted points. "#" until the Calendly booking exists, the
+// same as every other Get It Sorted on the site.
+interface Props {
+  ctaHref?: string;
+}
+const { ctaHref = "#" } = Astro.props;
+
 const stars = [0, 1, 2, 3, 4];
 ---
 
@@ -50,6 +58,8 @@ const stars = [0, 1, 2, 3, 4];
         <span class="five-live" aria-hidden="true"><span class="five-out"></span><span class="caret caret-f" hidden></span></span>
       </p>
     </div>
+
+    <a class="cta" href={ctaHref}>Get It Sorted</a>
   </div>
 
   <div class="cue">
@@ -129,6 +139,28 @@ const stars = [0, 1, 2, 3, 4];
     color: var(--ground-text, var(--deep-700));
   }
 
+  /* Get It Sorted. Exactly the nav pill's colours, Pink 400 with a Deep 950 label
+     hovering to Pink 300, just bigger because this one is the hero's. It pops in the
+     same way the stars do, and holds its space from the start so nothing shifts. */
+  .cta {
+    display: inline-block;
+    padding: 16px 34px;
+    border-radius: var(--radius-pill);
+    background: var(--pink-400);
+    color: var(--deep-950);
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    white-space: nowrap;
+    opacity: 0;
+    transform: scale(.4);
+    transition: background var(--dur-fast) var(--ease-out);
+  }
+  .cta.lit { animation: pop 420ms var(--ease-out) forwards; }
+  .cta:hover { background: var(--pink-300); color: var(--deep-950); }
+
   /* The way down. It sits in the hero's bottom padding, at the edge of the screen,
      so it reads as a signpost rather than one more line of the hero. */
   .cue {
@@ -182,8 +214,8 @@ const stars = [0, 1, 2, 3, 4];
 
   @media (prefers-reduced-motion: reduce) {
     .caret { display: none; }
-    .star { opacity: 1; transform: none; }
-    .star.lit { animation: none; }
+    .star, .cta { opacity: 1; transform: none; }
+    .star.lit, .cta.lit { animation: none; }
     .cue .chev { animation: none; }
     .cue { transition: none; }
   }
@@ -199,6 +231,7 @@ const stars = [0, 1, 2, 3, 4];
     .stars { height: 24px; gap: 6px; }
     .star { width: 24px; height: 24px; }
     .five { font-size: 17px; }
+    .cta { padding: 14px 28px; font-size: 16px; }
     .cue { bottom: 22px; }
     .cue .label { font-size: 13px; }
   }
@@ -234,6 +267,7 @@ const stars = [0, 1, 2, 3, 4];
   const caretS = document.querySelector<HTMLElement>(".hero .caret-s");
   const caretF = document.querySelector<HTMLElement>(".hero .caret-f");
   const cue = document.querySelector<HTMLElement>(".hero .cue");
+  const cta = document.querySelector<HTMLElement>(".hero .cta");
   const starEls = Array.from(document.querySelectorAll<HTMLElement>(".hero .star"));
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -247,6 +281,7 @@ const stars = [0, 1, 2, 3, 4];
       subOut.textContent = sub;
       fiveOut.textContent = five;
       starEls.forEach((el) => el.classList.add("lit"));
+      cta?.classList.add("lit");
       cue?.classList.add("shown");
     } else {
       const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -292,10 +327,12 @@ const stars = [0, 1, 2, 3, 4];
 
         caretOn("f");
         await type(fiveOut, [five], 84);
-        await sleep(500);
+        await sleep(400);
 
-        // Rest here. Everything stays, the caret goes, the way down arrives.
+        // The button lands, then the way down arrives and the hero rests.
         caretOn("none");
+        cta?.classList.add("lit");
+        await sleep(900);
         cue?.classList.add("shown");
       };
       run();
