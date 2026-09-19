@@ -1,0 +1,166 @@
+---
+// Home FAQ section, locked 19 Sep 2026 (FAQ board on the Sortoise Home canvas, variation F2).
+// One see-through white panel inside the 1120 cap, so the page ground shows through it.
+// Heading, a line pointing at the free discovery call, then the questions split by hairlines.
+// Click a question and its answer opens on a light grey card. Opening one closes the others.
+// The first question starts open.
+// This is the last section before the footer, so it brings the 96px top gap AND the 140px bottom gap.
+//
+// THE QUESTIONS ARE PLACEHOLDERS (Aaron, 19 Sep 2026: "take a guess, will change them later").
+// Three answers only repeat facts already on the page. The three in square brackets are waiting
+// for Aaron's words. Never guess a price or a timescale.
+// To change the questions, edit the list below. Nothing else needs touching.
+
+const faqs = [
+  {
+    q: "What do you actually build?",
+    a: "Custom software and web apps, custom CRMs, business admin and process automation, and mobile apps for the field. If none of those look like your business, don't panic, because if there's a task that eats your time we can almost certainly build a tool to save it.",
+  },
+  {
+    q: "What happens on the discovery call?",
+    a: "It's completely free. It's a chance for us to understand your business and work out whether we can get it sorted.",
+  },
+  {
+    q: "How much does it cost?",
+    a: "[PLACEHOLDER: Aaron to write how pricing works. No prices guessed here.]",
+  },
+  {
+    q: "How long does a build take?",
+    a: "[PLACEHOLDER: Aaron to write the usual timescale. No timescales guessed here.]",
+  },
+  {
+    q: "Do you only work with businesses in South Wales?",
+    a: "No. We're based in South Wales and we work with businesses right across the UK.",
+  },
+  {
+    q: "What happens once it's built?",
+    a: "[PLACEHOLDER: Aaron to write what aftercare and support look like.]",
+  },
+];
+
+// Where the "free discovery call" link goes. Point this at the Calendly booking once that is set up.
+const ctaHref = "#";
+---
+
+<section id="faq" class="faq">
+  <div class="panel">
+    <div class="intro">
+      <h2>Frequently asked questions</h2>
+      <p>Can't see yours? <a href={ctaHref}>Ask us on a free discovery call</a>.</p>
+    </div>
+
+    <div class="list">
+      {faqs.map((item, i) => (
+        <details class="row" name="home-faq" open={i === 0}>
+          <summary>
+            <span class="question">{item.q}</span>
+            <span class="icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                <path d="M5 12h14" />
+                <path class="bar" d="M12 5v14" />
+              </svg>
+            </span>
+          </summary>
+          <div class="answer">
+            <p>{item.a}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Last section before the footer: 96px above, 140px below. */
+  .faq {
+    padding: 96px 24px 140px;
+    font-family: var(--font-body);
+  }
+  /* The see-through panel. Half-white, so the tortoise marks show faintly behind it. */
+  .panel {
+    box-sizing: border-box;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 48px 56px;
+    border-radius: var(--radius-xl);
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(10, 61, 54, 0.13);
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .intro { display: flex; flex-direction: column; gap: 14px; }
+  h2 {
+    margin: 0;
+    font-size: 44px;
+    line-height: 1.06;
+    letter-spacing: -0.025em;
+    color: var(--deep-700);
+  }
+  .intro p { margin: 0; font-size: 17px; line-height: 1.55; color: var(--stone-700); }
+  .intro a {
+    color: #14685d;
+    font-weight: 400;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+  .intro a:hover { color: #1a8577; }
+
+  /* Each question is a row with a hairline above it. */
+  .row { border-top: 1px solid rgba(10, 61, 54, 0.14); }
+  summary {
+    list-style: none;
+    cursor: pointer;
+    min-height: 44px;
+    padding: 14px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--deep-700);
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary:focus-visible, .intro a:focus-visible { outline: 3px solid #1a8577; outline-offset: 3px; border-radius: 6px; }
+
+  /* The round plus sign. The upright stroke hides when the row is open, leaving a minus. */
+  .icon {
+    flex-shrink: 0;
+    box-sizing: border-box;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    border: 1px solid rgba(10, 61, 54, 0.22);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .row[open] .bar { display: none; }
+
+  /* The answer sits on a light grey card. */
+  .answer {
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    padding: 22px 24px;
+    border-radius: var(--radius-md);
+    background: var(--stone-50);
+    border: 1px solid var(--stone-200);
+  }
+  .answer p { margin: 0; max-width: 820px; font-size: 16.5px; line-height: 1.6; color: var(--stone-900); }
+
+  @media (max-width: 820px) {
+    .faq { padding: 96px 16px 140px; }
+    .panel { padding: 28px 20px; gap: 24px; }
+    .intro { gap: 12px; }
+    h2 { font-size: 30px; }
+    .intro p { font-size: 16px; }
+    summary { font-size: 17px; padding: 12px 0; gap: 16px; }
+    .answer { margin-bottom: 16px; padding: 18px; }
+    .answer p { font-size: 16px; }
+  }
+</style>
