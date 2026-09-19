@@ -1,8 +1,12 @@
 ---
-// Home video section, locked 18 Sep 2026 (Video board on the Sortoise Home canvas).
-// Bare on the page ground. The video frame is its own solid Deep 950 surface, 960px wide
-// inside the 1120px cap, pink play button, three chapter markers under it.
-// On phones the chapters fold into a "What's in the video" row that opens on tap.
+// Home video section, locked 18 Sep 2026, reordered 19 Sep 2026 (Video board on the
+// Sortoise Home canvas).
+// Bare on the page ground. The Watch eyebrow sits above the video and the heading sits
+// under it, so the section opens on the frame. The video frame is its own solid Deep 950
+// surface, 960px wide inside the 1120px cap, pink play button, three chapter markers
+// under the heading.
+// On phones the chapters stack open, each with the same rule above it as the desktop
+// columns. There is no fold and no "What's in the video" row any more.
 // Copy matches the board 1:1. Do not change without Aaron.
 //
 // embedUrl: the video's embed address (YouTube or Vimeo "embed" link). Empty for now,
@@ -26,10 +30,7 @@ const chapters = [
 
 <section id="video" class="video">
   <div class="inner">
-    <div class="heading">
-      <div class="eyebrow video-eyebrow">Watch</div>
-      <h2>How we diagnose a business, <span class="nowrap">then sort it</span></h2>
-    </div>
+    <div class="eyebrow video-eyebrow">Watch</div>
 
     <div class="frame" data-embed={embedUrl}>
       {poster && (
@@ -43,13 +44,9 @@ const chapters = [
       </button>
     </div>
 
-    <button type="button" class="chapters-toggle" aria-expanded="false" aria-controls="video-chapters">
-      <span>What's in the video</span>
-      <span class="toggle-right">
-        <span>{chapters.length} parts</span>
-        <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="#188f80" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-      </span>
-    </button>
+    <div class="heading">
+      <h2>How we diagnose a business, <span class="nowrap">then sort it</span></h2>
+    </div>
 
     <div id="video-chapters" class="chapters">
       {chapters.map((c) => (
@@ -79,16 +76,6 @@ const chapters = [
       iframe.allow = "autoplay; fullscreen; picture-in-picture";
       iframe.setAttribute("allowfullscreen", "");
       frame.replaceChildren(iframe);
-    });
-  });
-
-  // Phone: the chapters row opens and closes the list.
-  document.querySelectorAll<HTMLButtonElement>(".chapters-toggle").forEach((btn) => {
-    const list = document.getElementById(btn.getAttribute("aria-controls") || "");
-    btn.addEventListener("click", () => {
-      const open = btn.getAttribute("aria-expanded") === "true";
-      btn.setAttribute("aria-expanded", open ? "false" : "true");
-      list?.classList.toggle("open", !open);
     });
   });
 </script>
@@ -136,8 +123,6 @@ const chapters = [
   }
   .play:hover { background: var(--pink-400); }
 
-  .chapters-toggle { display: none; }
-
   .chapters {
     width: 100%; max-width: 960px;
     display: grid;
@@ -176,29 +161,10 @@ const chapters = [
     .play { width: 64px; height: 64px; }
     .play svg { width: 26px; height: 26px; }
 
-    .chapters-toggle {
-      display: flex; align-items: center; justify-content: space-between;
-      width: 100%; min-height: 48px; padding: 0 4px;
-      border: 0;
-      border-top: 2px solid var(--ground-rule, var(--paper-500));
-      border-bottom: 2px solid var(--ground-rule, var(--paper-500));
-      background: transparent; cursor: pointer;
-      font-family: var(--font-display); font-size: 15px; font-weight: 700;
-      color: var(--ground-text, var(--deep-700));
-      text-align: left;
-    }
-    .toggle-right {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 12px; font-weight: 600;
-      letter-spacing: var(--tracking-caps); text-transform: uppercase;
-      color: var(--teal-600);
-    }
-    .chevron { transition: transform var(--dur-med) var(--ease-out); }
-    .chapters-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
-
-    .chapters { display: none; margin-top: -8px; gap: 16px; }
-    .chapters.open { display: flex; flex-direction: column; }
-    .chapter { flex-direction: row; gap: 14px; align-items: flex-start; padding-top: 0; border-top: 0; }
+    /* The chapters stack open, keeping the same rule above each one that the desktop
+       columns have. That rule is what the old toggle bar's borders used to provide. */
+    .chapters { display: flex; flex-direction: column; gap: 16px; }
+    .chapter { flex-direction: row; gap: 14px; align-items: flex-start; }
     .time { flex-shrink: 0; width: 44px; padding-top: 3px; letter-spacing: 0.1em; }
     .chapter-body { gap: 2px; }
     .chapter-title { font-size: 17px; }
