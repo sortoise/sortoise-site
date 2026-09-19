@@ -1,0 +1,185 @@
+---
+// Home "Who we are" section with the final call to action, locked 19 Sep 2026
+// (WhoWeAre board on the Sortoise Home canvas).
+// One light teal (Teal 200) card inside the 1120 cap:
+//   top half: heading, one paragraph, then Aaron and Luke side by side (square photo, name, Founder, role),
+//   a faint rule,
+//   bottom half: the closing headline, the free discovery call line, the orange Get It Sorted button
+//   and a small link down to the case studies.
+// Two tortoise marks sit in the card corners as decoration.
+// The photos are used whole (square, 640 x 640), only compressed.
+// Do not change without Aaron.
+import Mark from "./Mark.astro";
+
+const people = [
+  {
+    name: "Aaron Davies",
+    role: "Marketing & Development",
+    photo: "/images/aaron-davies.webp",
+    photoFallback: "/images/aaron-davies.jpg",
+  },
+  {
+    name: "Luke Jenkins",
+    role: "Customer Relationships & Development",
+    photo: "/images/luke-jenkins.webp",
+    photoFallback: "/images/luke-jenkins.jpg",
+  },
+];
+
+// Where the orange button goes. Point this at the Calendly booking once that is set up.
+const ctaHref = "#";
+---
+
+<section id="who-we-are" class="who-we-are">
+  <div class="card">
+    <span class="mark mark-top" aria-hidden="true"><Mark size={112} /></span>
+    <span class="mark mark-bottom" aria-hidden="true"><Mark size={168} /></span>
+
+    <div class="who">
+      <div class="intro">
+        <h2>Who we are</h2>
+        <p>
+          Sortoise is two people, Aaron and Luke. We are both founders and we both build, so the
+          people you talk to are the people who do the work.
+        </p>
+      </div>
+      <ul class="people">
+        {people.map((p) => (
+          <li class="person">
+            <picture>
+              <source srcset={p.photo} type="image/webp" />
+              <img src={p.photoFallback} alt={p.name} width="640" height="640" loading="lazy" decoding="async" />
+            </picture>
+            <div class="caption">
+              <span class="name">{p.name}</span>
+              <span class="title">Founder</span>
+              <span class="role">{p.role}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="rule"></div>
+
+    <div class="closing">
+      <h2 class="closing-head">Got a task that eats up your week?</h2>
+      <p>
+        Share it with us on a free discovery call. It's a chance for us to understand your business
+        and work out whether we can get it sorted.
+      </p>
+      <div class="actions">
+        <a href={ctaHref} class="cta">Get It Sorted</a>
+        <a href="#case-study" class="see">See what we've built</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* This section brings its own 96px top padding (see the section spacing convention). */
+  .who-we-are {
+    padding: 96px 24px 0;
+    font-family: var(--font-body);
+  }
+  .card {
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    background: var(--teal-200);
+    border: 1px solid var(--teal-300);
+    border-radius: var(--radius-xl);
+    padding: 72px 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  /* The two tortoise marks in the corners. They sit behind the text. */
+  .mark { position: absolute; display: block; pointer-events: none; }
+  .mark-top { left: 14px; top: 14px; transform: rotate(128deg); opacity: 0.45; }
+  .mark-bottom { right: 6px; bottom: -24px; transform: rotate(-38deg); }
+
+  .who, .closing { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .who { gap: 28px; }
+  .closing { gap: 20px; }
+
+  .intro { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  h2 {
+    margin: 0;
+    font-size: 34px;
+    line-height: 1.06;
+    letter-spacing: -0.025em;
+    color: var(--deep-700);
+  }
+  .intro p { margin: 0; max-width: 600px; font-size: 17px; line-height: 1.55; color: var(--stone-900); }
+
+  .people { list-style: none; margin: 0; padding: 0; display: flex; justify-content: center; align-items: flex-start; gap: 40px; }
+  .person { width: 300px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .person img { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; border-radius: var(--radius-lg); }
+  .caption { display: flex; flex-direction: column; gap: 3px; }
+  .name { font-family: var(--font-display); font-size: 20px; font-weight: 600; color: var(--deep-700); }
+  .title { font-size: 14px; font-weight: 600; color: var(--deep-600); }
+  .role { font-size: 15px; line-height: 1.5; color: var(--stone-900); }
+
+  .rule { position: relative; height: 1px; background: var(--teal-400); opacity: 0.6; }
+
+  .closing-head { font-size: 44px; max-width: 780px; }
+  .closing p { margin: 0; max-width: 620px; font-size: 19px; line-height: 1.55; color: var(--stone-900); }
+  .actions { margin-top: 12px; display: flex; align-items: center; gap: 28px; }
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    box-sizing: border-box;
+    padding: 0 30px;
+    border-radius: var(--radius-pill);
+    background: var(--amber-500);
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--deep-950);
+    text-decoration: none;
+    transition: background var(--dur-fast) var(--ease-out);
+  }
+  .cta:hover { background: var(--amber-400); color: var(--deep-950); }
+  .see {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--deep-700);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+  .see:hover { color: var(--deep-600); }
+  .cta:focus-visible, .see:focus-visible { outline: 3px solid var(--deep-600); outline-offset: 3px; }
+
+  @media (max-width: 820px) {
+    /* Phone: smaller type, the two photos stay side by side, and the link drops under the button. */
+    .who-we-are { padding: 96px 16px 0; }
+    .card { padding: 40px 20px; gap: 36px; }
+    .mark-top { left: -6px; top: 2px; }
+    .mark-top :global(svg) { width: 72px; height: 72px; }
+    .mark-bottom { right: -24px; bottom: -22px; }
+    .mark-bottom :global(svg) { width: 112px; height: 112px; }
+    .who { gap: 24px; }
+    .intro { gap: 14px; }
+    h2 { font-size: 30px; line-height: 1.08; }
+    .intro p { font-size: 16px; }
+    .people { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .person { width: auto; min-width: 0; gap: 12px; }
+    .name { font-size: 17px; }
+    .title { font-size: 13px; }
+    .role { font-size: 13.5px; line-height: 1.45; }
+    .closing { gap: 16px; }
+    .closing-head { font-size: 32px; }
+    .closing p { font-size: 17px; }
+    .actions { margin-top: 8px; flex-direction: column; gap: 4px; }
+  }
+</style>
