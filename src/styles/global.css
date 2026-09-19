@@ -5,6 +5,13 @@
 
 html { -webkit-text-size-adjust: 100%; }
 
+/* Anchor jumps glide rather than snap, since the hero's way down is one.
+   #video clears the docked nav when it is jumped to. */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+#video { scroll-margin-top: 96px; }
+
 body {
   margin: 0;
   font-family: var(--font-body);
