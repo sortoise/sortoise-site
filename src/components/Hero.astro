@@ -17,8 +17,13 @@
 // there: headline, sub, five stars and the line, with no typing and no caret.
 //
 // Height: the hero takes whatever is left of the first screen once the nav above it
-// has had its share, so the video section always starts below the fold. The nav costs
-// 88px on desktop (20px above it, then a 68px bar) and 76px on phone.
+// has had its share. The nav costs 88px on desktop (20px above it, then a 68px bar)
+// and 76px on phone.
+// It measures in svh, not vh. On a phone, 100vh is the height the screen would have
+// with the browser's address bar hidden, which is taller than what you can actually
+// see on load, so the hero ran off the bottom of the screen, the content sat low and
+// the way down was pushed out of sight. svh is the smaller, always visible height.
+// The plain vh line above each one is the fallback for browsers that predate svh.
 const stars = [0, 1, 2, 3, 4];
 ---
 
@@ -61,6 +66,7 @@ const stars = [0, 1, 2, 3, 4];
     background: transparent;
     box-sizing: border-box;
     min-height: max(440px, calc(100vh - 88px));
+    min-height: max(440px, calc(100svh - 88px));
     padding: 24px 24px 104px;
     display: grid;
     place-items: center;
@@ -183,7 +189,11 @@ const stars = [0, 1, 2, 3, 4];
   }
 
   @media (max-width: 820px) {
-    .hero { min-height: max(360px, calc(100vh - 76px)); padding: 16px 20px 72px; }
+    .hero {
+      min-height: max(360px, calc(100vh - 76px));
+      min-height: max(360px, calc(100svh - 76px));
+      padding: 16px 20px 72px;
+    }
     .hero-inner { gap: 20px; }
     .sub { font-size: 17px; max-width: 100%; }
     .stars { height: 24px; gap: 6px; }
