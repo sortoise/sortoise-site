@@ -258,8 +258,11 @@ const stars = [0, 1, 2, 3, 4];
     }
   }
 
-  // One pass, then it rests. The per letter pace is 1.4x slower than the first build
-  // of this hero; the pauses where something is held were not slowed with it.
+  // One pass, then it rests.
+  // The two lines are typed at their own pace, set by Aaron: 160ms a letter for the
+  // headline and 90ms for the sub. They were tied to one multiplier before, which is
+  // why tuning the sub dragged the headline with it. The pauses where a line is held
+  // still are separate from these and are not part of the pacing.
   const out = document.querySelector<HTMLElement>(".hero .out");
   const subOut = document.querySelector<HTMLElement>(".hero .sub-out");
   const fiveOut = document.querySelector<HTMLElement>(".hero .five-out");
@@ -310,11 +313,11 @@ const stars = [0, 1, 2, 3, 4];
       const run = async () => {
         caretOn("h");
         await sleep(500);
-        await type(out, headline, 133);
+        await type(out, headline, 160);
         await sleep(900);
 
         caretOn("s");
-        await type(subOut, [sub], 36);
+        await type(subOut, [sub], 90);
         await sleep(1200);
 
         // Stars, one at a time.
