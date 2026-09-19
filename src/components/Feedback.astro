@@ -4,7 +4,7 @@
 //   headshot in a circle, five stars, the review, the client's name, and a Read more link
 //   that grows the same review in place. An arrow each side of the review moves to the next one,
 //   and it also moves on by itself every 8 seconds.
-// Steve's words are his own, unchanged. Wayne's are a placeholder until he sends his review.
+// Steve's and Wayne's words are their own, unchanged.
 // Do not change without Aaron.
 
 const reviews = [
@@ -29,13 +29,16 @@ const reviews = [
     id: "wayne",
     name: "Wayne",
     company: "D W Jenkins, building contractor",
-    photo: "",
-    photoFallback: "",
-    alt: "",
+    photo: "/images/wayne-dw-jenkins.webp",
+    photoFallback: "/images/wayne-dw-jenkins.jpg",
+    alt: "Wayne, D W Jenkins",
     opening:
-      "[Placeholder, not a real quote. The opening two sentences of Wayne's review sit here, in his own words, once he sends them",
-    rest: ["[Placeholder. The rest of Wayne's review, in his own words, once he sends it.]"],
-    placeholder: true,
+      "Before Sortoise, every job meant paperwork at the end of the day and invoices built by hand, with different rates and VAT rules depending on whether the work was for the Council or Care & Repair",
+    rest: [
+      "Aaron and Luke took the time to understand how we actually work on site, then built a system where the lads fill in a form on the job and the invoice is created and stored automatically with the right rates and VAT already applied.",
+      "It's saved us a lot of time, cut out the mistakes, and I finally have a clear view of what's been done and what's been billed. I'd recommend them to any small business that's drowning in admin.",
+    ],
+    placeholder: false,
   },
 ];
 
