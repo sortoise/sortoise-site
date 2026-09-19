@@ -205,6 +205,26 @@ const stars = [0, 1, 2, 3, 4];
 </style>
 
 <script>
+  // Start at the top of the page.
+  // Browsers remember where you were and put you back there when you return or
+  // reload, which drops a returning visitor into the middle of the page while the
+  // hero is still typing itself out. Since the hero plays an intro, everyone should
+  // begin at the top of it.
+  // Going back or forward is left alone, because there the remembered position is
+  // the whole point, and a link with a #target on it is left alone too.
+  {
+    const entry = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+    const backOrForward = entry?.type === "back_forward";
+    if (!backOrForward && !location.hash) {
+      if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+      // "instant" so it does not fight the smooth scrolling set in global.css.
+      const toTop = () => window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+      toTop();
+      // Again once everything has loaded, in case the browser restores late.
+      window.addEventListener("load", toTop, { once: true });
+    }
+  }
+
   // One pass, then it rests. The per letter pace is 1.4x slower than the first build
   // of this hero; the pauses where something is held were not slowed with it.
   const out = document.querySelector<HTMLElement>(".hero .out");
