@@ -155,19 +155,21 @@ const logos = [
   }
   .tile-deep  { background: var(--deep-950); color: var(--teal-300); }
   .tile-teal  { background: var(--deep-600); color: var(--teal-200); }
-  .tile-pink  { background: var(--pink-600); color: var(--pink-100); }
-  .tile-amber { background: var(--amber-600); color: var(--amber-100); }
+  .tile-pink  { background: var(--pink-400); color: var(--deep-950); }
+  .tile-amber { background: var(--amber-500); color: var(--deep-950); }
   .tile-top { display: flex; align-items: center; justify-content: space-between; }
   .tile h3 {
     margin: 0;
     font-size: 24px; line-height: 1.12; letter-spacing: var(--tracking-tight);
     color: #ffffff;
   }
+  .tile-pink h3, .tile-amber h3 { color: var(--deep-950); }
   /* The tick takes the tile's own accent (currentColor); the words stay Paper 200. */
   .points { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
   .points li { display: flex; gap: 10px; align-items: flex-start; font-size: 16px; line-height: var(--leading-body); }
   .points li svg { flex-shrink: 0; margin-top: 4px; }
   .points li span { color: var(--paper-200); }
+  .tile-pink .points li span, .tile-amber .points li span { color: var(--deep-950); }
 
   .link-row { display: flex; justify-content: flex-end; align-items: center; margin-top: -16px; }
   .see-all {
