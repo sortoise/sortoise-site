@@ -1,7 +1,7 @@
 ---
 // Home page. Section order per site-structure: nav, hero, video, services,
 // case study, feedback, who we are (with the final call to action in the same card), FAQ, footer.
-// Everything down to the FAQ is built so far. Only the footer is left.
+// Every Home section is built. The footer sits outside the page ground so it stays flat.
 import PageShell from "../layouts/PageShell.astro";
 import SiteNav from "../components/SiteNav.astro";
 import Hero from "../components/Hero.astro";
@@ -11,6 +11,7 @@ import CaseStudy from "../components/CaseStudy.astro";
 import Feedback from "../components/Feedback.astro";
 import WhoWeAre from "../components/WhoWeAre.astro";
 import FAQ from "../components/FAQ.astro";
+import Footer from "../components/Footer.astro";
 ---
 
 <PageShell title="Sortoise | Custom software for small businesses">
@@ -26,7 +27,8 @@ import FAQ from "../components/FAQ.astro";
     <WhoWeAre />
     <FAQ />
   </div>
-  <!-- Footer goes here, outside the page-ground wrapper (the footer stays flat). -->
+  <!-- The footer sits outside the page-ground wrapper, so the tortoise pattern never shows behind it. -->
+  <Footer />
 </PageShell>
 
 <style>
