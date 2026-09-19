@@ -1,7 +1,8 @@
 ---
 // Home video section, locked 18 Sep 2026, reordered 19 Sep 2026 (Video board on the
 // Sortoise Home canvas).
-// Bare on the page ground. The Watch eyebrow sits above the video and the heading sits
+// The section sits on the same half see-through panel as the FAQ, so the tortoise
+// marks still read faintly behind it. The Watch eyebrow sits above the video and the heading sits
 // under it, so the section opens on the frame. The video frame is its own solid Deep 950
 // surface, 960px wide inside the 1120px cap, pink play button, three chapter markers
 // under the heading.
@@ -84,9 +85,16 @@ const chapters = [
   /* Sections sit 96px apart. This section adds nothing above (the hero's bottom padding
      covers that) and nothing below; the next section brings its own 96px top. */
   .video { padding: 0 24px; font-family: var(--font-body); }
+  /* The same see-through panel as FAQ.astro: half white, so the tortoise marks on the
+     ground still show through it, with a hairline of the deep green at 13%. */
   .inner {
+    box-sizing: border-box;
     max-width: var(--container-max);
     margin: 0 auto;
+    padding: 48px 56px;
+    border-radius: var(--radius-xl);
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(10, 61, 54, 0.13);
     display: flex; flex-direction: column; align-items: center; gap: 40px;
   }
   .heading { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
@@ -154,7 +162,7 @@ const chapters = [
 
   @media (max-width: 820px) {
     .video { padding: 0 16px; }
-    .inner { gap: 24px; }
+    .inner { padding: 32px 20px; border-radius: var(--radius-lg); gap: 24px; }
     .heading { gap: 10px; }
     h2 { font-size: 32px; }
     .frame { border-radius: var(--radius-lg); }
