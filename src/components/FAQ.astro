@@ -45,8 +45,8 @@ const ctaHref = "#";
 <section id="faq" class="faq">
   <div class="panel">
     <div class="intro">
-      <h2>Frequently asked questions</h2>
-      <p>Can't see yours? <a href={ctaHref}>Ask us on a free discovery call</a>.</p>
+      <h2>FAQ</h2>
+      <p>Can't see yours? <a href={ctaHref}>Ask us on a free discovery call</a><span class="stop">.</span></p>
     </div>
 
     <div class="list">
@@ -159,6 +159,9 @@ const ctaHref = "#";
     .intro { gap: 12px; }
     h2 { font-size: 30px; }
     .intro p { font-size: 16px; }
+    /* On a phone the discovery call link drops onto its own line. */
+    .intro a { display: block; }
+    .stop { display: none; }
     summary { font-size: 17px; padding: 12px 0; gap: 16px; }
     .answer { margin-bottom: 16px; padding: 18px; }
     .answer p { font-size: 16px; }
