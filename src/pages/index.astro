@@ -1,11 +1,12 @@
 ---
 // Home page. Section order per site-structure: nav, hero, video, services,
-// case study, feedback, who we are, FAQ, footer. Nav, hero, video and services are built so far.
+// case study, feedback, who we are, FAQ, footer. Nav, hero, video, services and case study are built so far.
 import PageShell from "../layouts/PageShell.astro";
 import SiteNav from "../components/SiteNav.astro";
 import Hero from "../components/Hero.astro";
 import Video from "../components/Video.astro";
 import Services from "../components/Services.astro";
+import CaseStudy from "../components/CaseStudy.astro";
 ---
 
 <PageShell title="Sortoise | Custom software for small businesses">
@@ -16,7 +17,8 @@ import Services from "../components/Services.astro";
     <Hero />
     <Video />
     <Services />
-    <!-- Next sections go here, inside the page-ground wrapper: case study, feedback, who we are, FAQ. -->
+    <CaseStudy />
+    <!-- Next sections go here, inside the page-ground wrapper: feedback, who we are, FAQ. -->
   </div>
   <!-- Footer goes here, outside the page-ground wrapper (the footer stays flat). -->
 </PageShell>
