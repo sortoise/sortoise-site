@@ -1,16 +1,15 @@
 ---
 // Home hero, redesigned 19 Sep 2026. One headline, dead centre of the hero block, that types
-// itself out and loops: "Do More," "With Less." on two lines, a pause, wiped, then
-// "Get It Sorted," "With Sortoise.", a pause, wiped, and round again. Both phrases share one
-// colour per loop, then the next loop moves to the next colour: Deep Teal 700, Pink 400, Teal 400.
+// itself out and loops: "We Help Businesses," "Do More With Less." on two lines, a pause, wiped, then
+// "Get It Sorted," "With Sortoise.", a pause, wiped, and round again. All in Deep Teal 700.
 // No eyebrow, no button, no underliner. If the visitor has asked their device for less motion,
 // the two lines simply sit there in Deep Teal.
 ---
 
 <section class="hero">
-  <h1 class="typed" aria-label="Do More, With Less. Get It Sorted, With Sortoise."
-    ><span class="txt"><span class="out" aria-hidden="true">Do More,
-With Less.</span><span class="caret" aria-hidden="true"></span></span></h1>
+  <h1 class="typed" aria-label="We Help Businesses, Do More With Less. Get It Sorted, With Sortoise."
+    ><span class="txt"><span class="out" aria-hidden="true">We Help Businesses,
+Do More With Less.</span><span class="caret" aria-hidden="true"></span></span></h1>
 </section>
 
 <style>
@@ -27,17 +26,16 @@ With Less.</span><span class="caret" aria-hidden="true"></span></span></h1>
   .typed {
     max-width: var(--container-max);
     margin: 0;
-    font-size: clamp(44px, 7.2vw, 96px);
+    font-size: clamp(34px, 7.2vw, 96px);
     line-height: 1;
     letter-spacing: -0.03em;
-    color: var(--ink, var(--deep-700));
+    color: var(--deep-700);
     white-space: pre-wrap;
     /* Room for two lines, so nothing jumps while the words type in and out. */
     min-height: 2.1em;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    transition: color 0.4s;
   }
   .caret {
     display: inline-block;
@@ -58,16 +56,13 @@ With Less.</span><span class="caret" aria-hidden="true"></span></span></h1>
 </style>
 
 <script>
-  // Types the headline out letter by letter, on a loop, changing colour each time round.
-  const h1 = document.querySelector<HTMLElement>(".hero .typed");
+  // Types the headline out letter by letter, on a loop.
   const out = document.querySelector<HTMLElement>(".hero .out");
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  if (h1 && out && !reduce) {
-    const first = ["Do More,", "With Less."];
+  if (out && !reduce) {
+    const first = ["We Help Businesses,", "Do More With Less."];
     const second = ["Get It Sorted,", "With Sortoise."];
-    const colours = ["var(--deep-700)", "var(--pink-400)", "var(--teal-400)"];
-    let round = 0;
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
     const type = async (lines: string[], perChar: number) => {
@@ -92,7 +87,7 @@ With Less.</span><span class="caret" aria-hidden="true"></span></span></h1>
     };
 
     const loop = async () => {
-      // The page loads with the first phrase already showing in Deep Teal.
+      // The page loads with the first phrase already showing.
       await sleep(1800);
       await wipe();
       await sleep(300);
@@ -100,8 +95,6 @@ With Less.</span><span class="caret" aria-hidden="true"></span></span></h1>
       await sleep(2200);
       await wipe();
       while (true) {
-        round++;
-        h1.style.setProperty("--ink", colours[round % colours.length]);
         await sleep(400);
         await type(first, 95);
         await sleep(1800);
