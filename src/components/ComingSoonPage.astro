@@ -1,0 +1,62 @@
+---
+// A holding page for pages that are not built yet (Services, Case Study, Privacy policy, Terms).
+// Same nav, page ground and footer as Home, with one white card that says the page is coming soon.
+// When the real page is built, its file in src/pages stops using this and the holding card goes away.
+import PageShell from "../layouts/PageShell.astro";
+import SiteNav from "./SiteNav.astro";
+import Footer from "./Footer.astro";
+
+interface Props {
+  name: string;
+}
+const { name } = Astro.props;
+---
+
+<PageShell title={`${name} | Sortoise`}>
+  <div class="page-ground">
+    <div class="nav-wrap">
+      <SiteNav />
+    </div>
+    <main class="wrap">
+      <div class="card">
+        <h1>{name}</h1>
+        <p>This page is coming soon.</p>
+        <a href="/">Back to Home</a>
+      </div>
+    </main>
+  </div>
+  <Footer />
+</PageShell>
+
+<style>
+  .page-ground { width: 100%; min-height: 70vh; }
+  .nav-wrap { max-width: 1240px; margin: 0 auto; padding: 20px 60px 0; }
+  .wrap { padding: 96px 24px 140px; }
+  .card {
+    max-width: 1120px; margin: 0 auto; box-sizing: border-box;
+    padding: 72px 56px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-xl);
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+  h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 44px; font-weight: 700; line-height: 1.06; letter-spacing: -0.025em;
+    color: var(--deep-700);
+  }
+  p { margin: 0; font-size: 19px; line-height: 1.55; color: var(--stone-700); }
+  a {
+    font-size: 16px; font-weight: 400; color: var(--deep-600);
+    text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px;
+  }
+  @media (max-width: 820px) {
+    .nav-wrap { padding: 12px 16px 0; }
+    .wrap { padding: 72px 16px 140px; }
+    .card { padding: 48px 20px; }
+    h1 { font-size: 32px; }
+    p { font-size: 17px; }
+  }
+</style>
