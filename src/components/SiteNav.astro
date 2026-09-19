@@ -131,6 +131,8 @@ const {
       const open = burger.getAttribute("aria-expanded") === "true";
       burger.setAttribute("aria-expanded", open ? "false" : "true");
       panel.hidden = open;
+      // Opening the menu always brings the bar back into view.
+      if (!open) document.querySelector(".nav-wrap")?.classList.remove("nav-tucked");
     });
     panel.querySelectorAll("a").forEach((a) =>
       a.addEventListener("click", () => {
@@ -138,5 +140,29 @@ const {
         panel.hidden = true;
       })
     );
+  }
+
+  // Tucks the bar away on the way down and brings it back on the way up.
+  // Near the top it is always shown, and it never hides with the phone menu open.
+  const dock = document.querySelector<HTMLElement>(".nav-wrap");
+  if (dock) {
+    let last = window.scrollY;
+    let queued = false;
+    const update = () => {
+      queued = false;
+      const y = window.scrollY;
+      const menuOpen = burger?.getAttribute("aria-expanded") === "true";
+      if (y <= dock.offsetHeight + 40 || menuOpen) {
+        dock.classList.remove("nav-tucked");
+      } else if (y > last + 6) {
+        dock.classList.add("nav-tucked");
+      } else if (y < last - 6) {
+        dock.classList.remove("nav-tucked");
+      }
+      last = y;
+    };
+    window.addEventListener("scroll", () => {
+      if (!queued) { queued = true; requestAnimationFrame(update); }
+    }, { passive: true });
   }
 </script>

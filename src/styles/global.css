@@ -38,6 +38,22 @@ a {
 }
 a:hover { color: #1a8577; text-decoration-color: var(--teal-500); }
 
+/* The nav docks to the top of the screen and gets out of the way while you read.
+   Scrolling down tucks it up out of sight, scrolling up brings it straight back, so
+   the menu and Get It Sorted are always one small gesture away without the bar
+   sitting on top of the page the whole time. It keeps its place in the flow, so the
+   hero still measures its height against it. */
+.nav-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  transition: transform var(--dur-med) var(--ease-out);
+}
+.nav-wrap.nav-tucked { transform: translateY(-140%); }
+@media (prefers-reduced-motion: reduce) {
+  .nav-wrap { transition: none; }
+}
+
 /* The page ground: Paper 200 with the tortoise marks at 19%, tiled at 1600px.
    One wrapper holds the nav, hero and every section. Never on the footer. */
 .page-ground {
