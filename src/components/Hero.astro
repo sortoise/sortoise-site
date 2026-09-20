@@ -97,6 +97,11 @@ Do More With Less.</h1>
     min-height: max(440px, calc(100svh - 88px));
     padding: 24px 24px 104px;
     display: grid;
+    /* The column must be allowed to shrink. Without this it sizes itself to its
+       widest content, and the reel's track is deliberately max-content wide so the
+       marquee can run, which dragged the whole hero out to 1120px and centred that
+       in a 390px phone. Everything ended up off the side of the screen. */
+    grid-template-columns: minmax(0, 1fr);
     place-items: center;
     text-align: center;
     font-family: var(--font-body);
@@ -107,6 +112,7 @@ Do More With Less.</h1>
     align-items: center;
     gap: 28px;
     width: 100%;
+    min-width: 0;
     max-width: var(--container-max);
   }
   .headline {
@@ -143,8 +149,10 @@ Do More With Less.</h1>
   /* The Powered by reel, the same build as the one in Services.astro. Each run
      carries its own trailing gap so the two runs are exactly the same width and
      sliding half way left lands on the start of the second with no seam. */
-  .powered { display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%; }
-  .reel { position: relative; overflow: hidden; width: 100%; }
+  /* min-width: 0 on both, so the track's max-content width stays inside the reel
+     instead of pushing its parents wider than the screen. */
+  .powered { display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%; min-width: 0; }
+  .reel { position: relative; overflow: hidden; width: 100%; min-width: 0; }
   /* Fade at both edges so the logos slide in and out rather than cut off. */
   .reel::before, .reel::after {
     content: ""; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 1; pointer-events: none;
