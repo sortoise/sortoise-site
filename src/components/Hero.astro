@@ -1,65 +1,82 @@
 ---
-// Home hero, redesigned 19 Sep 2026.
+// Home hero, rebuilt 20 Sep 2026. Everything is simply there when the page loads.
 //
-// The hero starts EMPTY and plays one sequence, then stops for good:
-//   1. the headline types itself, "We Help Businesses," / "Do More With Less.", and holds
-//   2. the sub line types underneath it and holds
-//   3. five stars pop in one at a time
-//   4. "A five star service" types under them
-//   5. the Get It Sorted button pops in
-//   6. the way down fades in at the foot of the screen
-// Nothing wipes and nothing loops. "Get It Sorted, With Sortoise." is deliberately not
-// in the hero, Aaron's call on 19 Sep.
+// In order: the headline, the sub line, five stars and "A five star service" sharing
+// one row, the Powered by reel, and the way down to the video at the foot of the
+// screen. No typing, no caret, no Get It Sorted button.
 //
-// Everything is Deep Teal 700 except the stars, which are Amber 500, and the caret,
-// which is Pink 500 and follows whatever is typing.
-// No eyebrow and no button.
-// If the visitor has asked their device for less motion, the finished hero is simply
-// there: headline, sub, five stars and the line, with no typing and no caret.
+// The typewriter went because it put the proof and the reel twenty seconds down the
+// road, so anyone who scrolled early never saw them. The only movement left is the
+// reel and the small bob on the chevron.
+//
+// The reel is the same one that sits at the foot of the Services card and is built
+// the same way, two identical runs sliding half a width so the loop has no seam. It
+// runs the full 1120px content cap, which is exactly the width of the nav bar above
+// it (1240px wrap less its 60px sides). Aaron's call.
+// NOTE: this does not remove the reel from Services, so it is on Home twice until
+// that section's own chat takes it out.
 //
 // Height: the hero takes whatever is left of the first screen once the nav above it
-// has had its share. The nav costs 88px on desktop (20px above it, then a 68px bar)
-// and 76px on phone.
-// It measures in svh, not vh. On a phone, 100vh is the height the screen would have
-// with the browser's address bar hidden, which is taller than what you can actually
-// see on load, so the hero ran off the bottom of the screen, the content sat low and
-// the way down was pushed out of sight. svh is the smaller, always visible height.
-// The plain vh line above each one is the fallback for browsers that predate svh.
-// ctaHref: where Get It Sorted points. "#" until the Calendly booking exists, the
-// same as every other Get It Sorted on the site.
-interface Props {
-  ctaHref?: string;
-}
-const { ctaHref = "#" } = Astro.props;
+// has had its share, 88px on desktop and 76px on phone. It measures in svh, not vh,
+// because on a phone 100vh is the height the screen would have with the address bar
+// hidden, which is taller than what you can see on arrival.
+
+// Logo files live in public/logos. "mark" logos are square icons, "word" logos are
+// wordmarks, so they get different heights and read as the same size.
+const logos = [
+  { name: "Supabase", file: "supabase.png", kind: "mark" },
+  { name: "Firebase", file: "firebase.png", kind: "mark" },
+  { name: "Zapier", file: "zapier.png", kind: "mark" },
+  { name: "n8n", file: "n8n.png", kind: "word" },
+  { name: "Make", file: "make.png", kind: "word" },
+  { name: "GitHub", file: "github.png", kind: "mark" },
+  { name: "Stripe", file: "stripe.png", kind: "word" },
+  { name: "Twilio", file: "twilio.png", kind: "word" },
+  { name: "Google Drive", file: "google-drive.png", kind: "mark" },
+  { name: "Google Calendar", file: "google-calendar.png", kind: "word" },
+  { name: "Calendly", file: "calendly.png", kind: "word" },
+  { name: "Microsoft Teams", file: "microsoft-teams.png", kind: "mark" },
+  { name: "Xero", file: "xero.png", kind: "mark" },
+  { name: "VS Code", file: "vs-code.png", kind: "mark" },
+];
 
 const stars = [0, 1, 2, 3, 4];
+const star = "M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z";
 ---
 
 <section class="hero">
   <div class="hero-inner">
-    <h1 class="typed" aria-label="We Help Businesses, Do More With Less."
-      ><span class="txt"><span class="out" aria-hidden="true"></span><span class="caret caret-h" aria-hidden="true"></span></span></h1>
+    <h1 class="headline">We Help Businesses,
+Do More With Less.</h1>
 
-    <p class="sub">
-      <span class="sr-only">Custom software that sorts your workflow and takes the day-to-day tasks off your team.</span>
-      <span class="sub-ghost" aria-hidden="true">Custom software that sorts your workflow and takes the day-to-day tasks off your team.</span>
-      <span class="sub-live" aria-hidden="true"><span class="sub-out"></span><span class="caret caret-s" hidden></span></span>
-    </p>
+    <p class="sub">Custom software that sorts your workflow and takes the day-to-day tasks off your team.</p>
 
     <div class="proof">
       <div class="stars" aria-hidden="true">
         {stars.map(() => (
-          <svg class="star" viewBox="0 0 24 24"><path fill="#e07a2f" d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>
+          <svg class="star" viewBox="0 0 24 24"><path fill="#e07a2f" d={star}></path></svg>
         ))}
       </div>
-      <p class="five">
-        <span class="sr-only">A five star service</span>
-        <span class="five-ghost" aria-hidden="true">A five star service</span>
-        <span class="five-live" aria-hidden="true"><span class="five-out"></span><span class="caret caret-f" hidden></span></span>
-      </p>
+      <span class="five">A five star service</span>
     </div>
 
-    <a class="cta" href={ctaHref}>Get It Sorted</a>
+    <div class="powered">
+      <div class="eyebrow">Powered by</div>
+      <div class="reel" aria-label="Platforms we build with">
+        <div class="track">
+          <div class="run">
+            {logos.map((l) => (
+              <div class="logo"><img src={`/logos/${l.file}`} alt={l.name} class={l.kind} /></div>
+            ))}
+          </div>
+          <div class="run" aria-hidden="true">
+            {logos.map((l) => (
+              <div class="logo"><img src={`/logos/${l.file}`} alt="" class={l.kind} /></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="cue">
@@ -88,78 +105,58 @@ const stars = [0, 1, 2, 3, 4];
     flex-direction: column;
     align-items: center;
     gap: 28px;
+    width: 100%;
     max-width: var(--container-max);
   }
-  .typed {
+  .headline {
     margin: 0;
     font-size: clamp(34px, 7.2vw, 66px);
     line-height: 1;
     letter-spacing: -0.03em;
     color: var(--deep-700);
-    white-space: pre-wrap;
-    /* Room for two lines, so nothing jumps while the words type in. */
-    min-height: 2.1em;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    /* The line break in the markup is the break on screen. */
+    white-space: pre-line;
   }
-  /* The sub and the five star line each keep a hidden copy of themselves at full
-     length, so the hero reserves the right height from the start and nothing shifts
-     as the words arrive. */
   .sub {
-    position: relative;
     margin: 0;
     max-width: 560px;
     font-size: var(--text-lead);
     line-height: var(--leading-body);
     color: var(--ground-text-soft, var(--stone-700));
   }
-  .sub-ghost, .five-ghost { visibility: hidden; }
-  .sub-live, .five-live { position: absolute; inset: 0; }
 
-  /* Five stars, then the line under them. The stars hold their space from the start
-     too, so only their opacity and scale change. Amber 500 is the palette's one warm
-     accent that is not already spoken for: pink is the caret and the nav pill. */
-  .proof { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-  .stars { display: flex; gap: 8px; height: 30px; }
-  .star { width: 30px; height: 30px; display: block; opacity: 0; transform: scale(.4); }
-  .star.lit { animation: pop 420ms var(--ease-out) forwards; }
-  @keyframes pop {
-    0%   { opacity: 0; transform: scale(.4); }
-    60%  { opacity: 1; transform: scale(1.14); }
-    100% { opacity: 1; transform: scale(1); }
-  }
+  /* Stars and their line share one row. The stars are 26px so they sit beside
+     19px text rather than towering over it. */
+  .proof { display: flex; align-items: center; justify-content: center; gap: 12px; }
+  .stars { display: flex; gap: 6px; }
+  .star { width: 26px; height: 26px; display: block; }
   .five {
-    position: relative;
-    margin: 0;
     font-family: var(--font-display);
     font-size: 19px;
     font-weight: 600;
     letter-spacing: -0.01em;
     color: var(--ground-text, var(--deep-700));
+    white-space: nowrap;
   }
 
-  /* Get It Sorted. Exactly the nav pill's colours, Pink 400 with a Deep 950 label
-     hovering to Pink 300, just bigger because this one is the hero's. It pops in the
-     same way the stars do, and holds its space from the start so nothing shifts. */
-  .cta {
-    display: inline-block;
-    padding: 16px 34px;
-    border-radius: var(--radius-pill);
-    background: var(--pink-400);
-    color: var(--deep-950);
-    font-family: var(--font-display);
-    font-size: 17px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    text-decoration: none;
-    white-space: nowrap;
-    opacity: 0;
-    transform: scale(.4);
-    transition: background var(--dur-fast) var(--ease-out);
+  /* The Powered by reel, the same build as the one in Services.astro. Each run
+     carries its own trailing gap so the two runs are exactly the same width and
+     sliding half way left lands on the start of the second with no seam. */
+  .powered { display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%; }
+  .reel { position: relative; overflow: hidden; width: 100%; }
+  /* Fade at both edges so the logos slide in and out rather than cut off. */
+  .reel::before, .reel::after {
+    content: ""; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 1; pointer-events: none;
   }
-  .cta.lit { animation: pop 420ms var(--ease-out) forwards; }
-  .cta:hover { background: var(--pink-300); color: var(--deep-950); }
+  .reel::before { left: 0; background: linear-gradient(90deg, var(--paper-200), rgba(250, 245, 224, 0)); }
+  .reel::after { right: 0; background: linear-gradient(270deg, var(--paper-200), rgba(250, 245, 224, 0)); }
+  .track { display: flex; width: max-content; animation: reel 45s linear infinite; }
+  .run { display: flex; gap: 56px; padding-right: 56px; flex-shrink: 0; }
+  @keyframes reel { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .logo { flex-shrink: 0; display: flex; align-items: center; justify-content: center; height: 44px; }
+  .logo img { width: auto; display: block; }
+  .logo img.mark { height: 36px; }
+  .logo img.word { height: 26px; }
 
   /* The way down. It sits in the hero's bottom padding, at the edge of the screen,
      so it reads as a signpost rather than one more line of the hero. */
@@ -168,10 +165,7 @@ const stars = [0, 1, 2, 3, 4];
     left: 0; right: 0; bottom: 34px;
     display: flex;
     justify-content: center;
-    opacity: 0;
-    transition: opacity 500ms var(--ease-out);
   }
-  .cue.shown { opacity: 1; }
   .cue a {
     display: inline-flex;
     flex-direction: column;
@@ -193,45 +187,28 @@ const stars = [0, 1, 2, 3, 4];
   .cue .chev { animation: bob 2.2s ease-in-out infinite; }
   @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
 
-  /* The full sentence for screen readers, since the visible copy is typed a letter
-     at a time and the sizing copy is hidden from them. */
-  .sr-only {
-    position: absolute; width: 1px; height: 1px;
-    padding: 0; margin: -1px; overflow: hidden;
-    clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
-  }
-  .caret {
-    display: inline-block;
-    width: 0.06em;
-    height: 0.9em;
-    margin-left: 0.04em;
-    vertical-align: -0.08em;
-    background: var(--pink-500);
-    animation: blink 1s steps(2) infinite;
-  }
-  .caret[hidden] { display: none; }
-  @keyframes blink { to { opacity: 0; } }
-
   @media (prefers-reduced-motion: reduce) {
-    .caret { display: none; }
-    .star, .cta { opacity: 1; transform: none; }
-    .star.lit, .cta.lit { animation: none; }
-    .cue .chev { animation: none; }
-    .cue { transition: none; }
+    .track, .cue .chev { animation: none; }
   }
 
   @media (max-width: 820px) {
+    /* 16px sides, the same gutter as the nav wrap, so the reel lines up with the bar. */
     .hero {
       min-height: max(360px, calc(100vh - 76px));
       min-height: max(360px, calc(100svh - 76px));
-      padding: 16px 20px 72px;
+      padding: 16px 16px 72px;
     }
     .hero-inner { gap: 20px; }
     .sub { font-size: 17px; max-width: 100%; }
-    .stars { height: 24px; gap: 6px; }
-    .star { width: 24px; height: 24px; }
-    .five { font-size: 17px; }
-    .cta { padding: 14px 28px; font-size: 16px; }
+    .star { width: 20px; height: 20px; }
+    .stars { gap: 4px; }
+    .five { font-size: 16px; }
+    .powered { gap: 14px; }
+    .reel::before, .reel::after { width: 40px; }
+    .run { gap: 36px; padding-right: 36px; }
+    .logo { height: 40px; }
+    .logo img.mark { height: 30px; }
+    .logo img.word { height: 22px; }
     .cue { bottom: 22px; }
     .cue .label { font-size: 13px; }
   }
@@ -240,9 +217,7 @@ const stars = [0, 1, 2, 3, 4];
 <script>
   // Start at the top of the page.
   // Browsers remember where you were and put you back there when you return or
-  // reload, which drops a returning visitor into the middle of the page while the
-  // hero is still typing itself out. Since the hero plays an intro, everyone should
-  // begin at the top of it.
+  // reload, which drops a returning visitor into the middle of the page.
   // Going back or forward is left alone, because there the remembered position is
   // the whole point, and a link with a #target on it is left alone too.
   {
@@ -253,92 +228,7 @@ const stars = [0, 1, 2, 3, 4];
       // "instant" so it does not fight the smooth scrolling set in global.css.
       const toTop = () => window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
       toTop();
-      // Again once everything has loaded, in case the browser restores late.
       window.addEventListener("load", toTop, { once: true });
-    }
-  }
-
-  // One pass, then it rests.
-  // The two lines are typed at their own pace, set by Aaron: 160ms a letter for the
-  // headline and 90ms for the sub. They were tied to one multiplier before, which is
-  // why tuning the sub dragged the headline with it. The pauses where a line is held
-  // still are separate from these and are not part of the pacing.
-  const out = document.querySelector<HTMLElement>(".hero .out");
-  const subOut = document.querySelector<HTMLElement>(".hero .sub-out");
-  const fiveOut = document.querySelector<HTMLElement>(".hero .five-out");
-  const caretH = document.querySelector<HTMLElement>(".hero .caret-h");
-  const caretS = document.querySelector<HTMLElement>(".hero .caret-s");
-  const caretF = document.querySelector<HTMLElement>(".hero .caret-f");
-  const cue = document.querySelector<HTMLElement>(".hero .cue");
-  const cta = document.querySelector<HTMLElement>(".hero .cta");
-  const starEls = Array.from(document.querySelectorAll<HTMLElement>(".hero .star"));
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  const headline = ["We Help Businesses,", "Do More With Less."];
-  const sub = "Custom software that sorts your workflow and takes the day-to-day tasks off your team.";
-  const five = "A five star service";
-
-  if (out && subOut && fiveOut) {
-    if (reduce) {
-      out.textContent = headline.join("\n");
-      subOut.textContent = sub;
-      fiveOut.textContent = five;
-      starEls.forEach((el) => el.classList.add("lit"));
-      cta?.classList.add("lit");
-      cue?.classList.add("shown");
-    } else {
-      const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
-      // Which line the caret sits on. "none" once the hero has come to rest.
-      const caretOn = (which: "h" | "s" | "f" | "none") => {
-        if (caretH) caretH.hidden = which !== "h";
-        if (caretS) caretS.hidden = which !== "s";
-        if (caretF) caretF.hidden = which !== "f";
-      };
-
-      const type = async (el: HTMLElement, lines: string[], perChar: number) => {
-        el.textContent = "";
-        for (let i = 0; i < lines.length; i++) {
-          for (const ch of lines[i]) {
-            el.textContent += ch;
-            await sleep(perChar);
-          }
-          if (i < lines.length - 1) {
-            el.textContent += "\n";
-            await sleep(220);
-          }
-        }
-      };
-
-      const run = async () => {
-        caretOn("h");
-        await sleep(500);
-        await type(out, headline, 160);
-        await sleep(900);
-
-        caretOn("s");
-        await type(subOut, [sub], 90);
-        await sleep(1200);
-
-        // Stars, one at a time.
-        caretOn("none");
-        for (const el of starEls) {
-          el.classList.add("lit");
-          await sleep(150);
-        }
-        await sleep(400);
-
-        caretOn("f");
-        await type(fiveOut, [five], 84);
-        await sleep(400);
-
-        // The button lands, then the way down arrives and the hero rests.
-        caretOn("none");
-        cta?.classList.add("lit");
-        await sleep(900);
-        cue?.classList.add("shown");
-      };
-      run();
     }
   }
 </script>
