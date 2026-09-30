@@ -1,0 +1,403 @@
+---
+// Case Study page stories, built 30 Sep 2026 from the Switch-A board on the Sortoise Case Study canvas.
+// One see-through panel in the FAQ style. Both clients sit as tabs across the top and the story
+// swaps underneath. A link from Home (/case-study#d-w-jenkins) opens that client's story.
+// Each story: name and trade, headline, who they are and the problem side by side, a numbered
+// "how it works now" list with room for one screenshot, the result as four ticks, the client's own
+// words, then a question and the amber Get It Sorted button.
+// Quotes are the clients' own, taken from the reviews on the Home page. Do not change without Aaron.
+
+// Point at the Calendly booking when that is set up, same as every other Get It Sorted.
+const ctaHref = "#";
+
+const studies = [
+  {
+    id: "d-w-jenkins",
+    name: "D W Jenkins",
+    trade: "Building contractor, Llanelli",
+    logo: "/logos/clients/d-w-jenkins.png",
+    headline: "How we cut 8 to 12 hours of weekly admin.",
+    who: "Wayne runs D W Jenkins, a building contractor in Llanelli. He carries out home improvement work for the local council and non-profit organisations. He is paid per item or per lot, at a price agreed with the contractor before the work starts. So getting paid means proving exactly what went in at every address.",
+    problem:
+      "For every job address Wayne had to record by hand how much of each item was installed, write a site-specific health and safety document and gather photo evidence of the work. Only then could he build the invoice and send the lot to the contractor.",
+    cost: "It was taking him 8 to 12 hours a week, a job Wayne had dreaded for years.",
+    stepLabel: "How his week works now",
+    steps: [
+      { title: "On the job", text: "Wayne logs each item and quantity at the address in the site app." },
+      { title: "Photo evidence", text: "He takes the photos in the app and they are filed against that address." },
+      { title: "Health and safety", text: "A short Q&A and the site-specific H&S document is written for him." },
+      { title: "Back at the desk", text: "Everything lands in the desktop app, job by job." },
+      { title: "One click", text: "Invoice, H&S and photos come out as one pack, ready for the contractor." },
+    ],
+    // Set src (and webp, when there is one) as soon as Aaron sends the screenshot.
+    shot: null,
+    results: [
+      "8 to 12 hours of repetitive admin back every week",
+      "Analytics on all the work he has completed",
+      "An audit trail of every job",
+      "All his earnings in one place",
+    ],
+    quote:
+      "It's saved us a lot of time, cut out the mistakes, and I finally have a clear view of what's been done and what's been billed.",
+    said: "Wayne, D W Jenkins",
+    ctaLine: "Got a job like Wayne's that eats your week?",
+  },
+  {
+    id: "cavity-wall-extraction-uk",
+    name: "Cavity Wall Extraction UK",
+    trade: "Surveys and extraction",
+    logo: "/logos/clients/cavity-wall-extraction-uk.png",
+    headline: "How we built Steve a CRM that runs itself.",
+    who: "Steve runs Cavity Wall Extraction UK. He surveys homes, extracts failed cavity wall insulation and quotes each job from what he finds on site, so every sale starts with a lead that has to be answered quickly and followed all the way through.",
+    problem:
+      "Steve had paid someone to build him a CRM, but it was shaped like a general tool rather than his business, with a pile of tabs he never used. He moved every lead through the stages by hand, emailed proposals from the office, chased the ones that went unsigned, and dug through his camera roll whenever he built one. Missed calls to his work phone never reached the CRM at all.",
+    cost: "Every sale depended on him remembering the next step.",
+    stepLabel: "How a lead runs through it now",
+    steps: [
+      { title: "The lead lands", text: "Online form leads arrive in his lead inbox and the customer gets a text telling them to expect a call." },
+      { title: "Missed calls too", text: "A mobile app picks up missed calls to his work phone and adds them as leads, so nothing is lost." },
+      { title: "Booked in", text: "The survey goes into his calendar from the tool, and the customer gets a reminder 24 hours before." },
+      { title: "On the survey", text: "He records the findings and meterage in the app, which moves the lead on and tells the customer a proposal is coming." },
+      { title: "Proposal sent", text: "The proposal is built and sent from the CRM, and lands in the customer's email to read and sign." },
+      { title: "Chased and signed", text: "Text and email reminders go out, with a call scheduled if there is no answer after five days. Once it is signed the job moves through to install." },
+    ],
+    shot: null,
+    results: [
+      "Every lead and missed call in one place",
+      "He knows exactly where each sale sits",
+      "Proposals and chasers move on their own",
+      "More time to bring leads in and do the work",
+    ],
+    quote:
+      "What Aaron and Luke have built does everything we want and more, and we can finally do everything from one application.",
+    said: "Steve, Cavity Wall Extraction UK",
+    ctaLine: "Leads slipping through the cracks in your business?",
+  },
+];
+---
+
+<section id="case-studies" class="case-studies">
+  <div class="card">
+    <div class="tabs" role="tablist" aria-label="Choose a case study">
+      {studies.map((s, i) => (
+        <button
+          type="button"
+          class="tab"
+          role="tab"
+          data-cs-tab={s.id}
+          id={`tab-${s.id}`}
+          aria-controls={`panel-${s.id}`}
+          aria-selected={i === 0 ? "true" : "false"}
+          tabindex={i === 0 ? 0 : -1}
+        >
+          <img src={s.logo} alt="" width="54" height="44" />
+          <span class="tab-text">
+            <span class="tab-name">{s.name}</span>
+            <span class="tab-trade">{s.trade}</span>
+          </span>
+        </button>
+      ))}
+    </div>
+
+    <div class="rule"></div>
+
+    {studies.map((s, i) => (
+      <article
+        class="panel"
+        id={`panel-${s.id}`}
+        data-cs-panel={s.id}
+        role="tabpanel"
+        aria-labelledby={`tab-${s.id}`}
+        hidden={i !== 0}
+      >
+        <span class="anchor" id={s.id}></span>
+
+        <h2>{s.headline}</h2>
+
+        <div class="intro">
+          <div class="col">
+            <p class="label">Who they are</p>
+            <p>{s.who}</p>
+          </div>
+          <div class="col">
+            <p class="label problem-label">The problem</p>
+            <p>{s.problem}</p>
+            <p class="cost">{s.cost}</p>
+          </div>
+        </div>
+
+        <div class="rule"></div>
+
+        <div class={s.shot ? "how how-with-shot" : "how"}>
+          <div class="steps-col">
+            <p class="label">{s.stepLabel}</p>
+            <ol class="steps">
+              {s.steps.map((step) => (
+                <li>
+                  <span class="num" aria-hidden="true"></span>
+                  <span class="step-text">
+                    <span class="step-title">{step.title}</span>
+                    <span>{step.text}</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
+          {s.shot && (
+            <figure class="shot">
+              <img src={s.shot.src} alt={s.shot.alt} loading="lazy" />
+            </figure>
+          )}
+        </div>
+
+        <div class="result">
+          <p class="label">The result</p>
+          <ul>
+            {s.results.map((r) => (
+              <li>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+                <span>{r}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <figure class="quote">
+          <blockquote>&ldquo;{s.quote}&rdquo;</blockquote>
+          <figcaption>{s.said}</figcaption>
+        </figure>
+
+        <div class="cta">
+          <p>{s.ctaLine}</p>
+          <a class="pill" href={ctaHref}>Get It Sorted</a>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<script>
+  // Swaps the story when a client tab is clicked, and opens on the client named in the address
+  // (/case-study#d-w-jenkins), which is where the Home case studies link points.
+  document.querySelectorAll<HTMLElement>("#case-studies").forEach((root) => {
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-cs-tab]"));
+    const panels = Array.from(root.querySelectorAll<HTMLElement>("[data-cs-panel]"));
+    const show = (id: string, focus = false) => {
+      if (!tabs.some((t) => t.dataset.csTab === id)) return;
+      tabs.forEach((t) => {
+        const on = t.dataset.csTab === id;
+        t.setAttribute("aria-selected", on ? "true" : "false");
+        t.tabIndex = on ? 0 : -1;
+        if (on && focus) t.focus();
+      });
+      panels.forEach((p) => { p.hidden = p.dataset.csPanel !== id; });
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => show(t.dataset.csTab!));
+      t.addEventListener("keydown", (e) => {
+        if (!["ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp"].includes(e.key)) return;
+        e.preventDefault();
+        const step = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : -1;
+        show(tabs[(i + step + tabs.length) % tabs.length].dataset.csTab!, true);
+      });
+    });
+    const fromHash = () => show(decodeURIComponent(location.hash.replace("#", "")));
+    fromHash();
+    window.addEventListener("hashchange", fromHash);
+  });
+</script>
+
+<style>
+  /* This section brings its own 96px top padding (see the section spacing convention),
+     and 140px underneath because it is the last section before the footer. */
+  .case-studies { padding: 96px 24px 140px; font-family: var(--font-body); }
+
+  .card {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    box-sizing: border-box;
+    /* The same see-through panel as the Home FAQ, so the tortoise marks show through. */
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(10, 61, 54, 0.13);
+    border-radius: var(--radius-xl);
+    padding: 48px 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .tabs { display: flex; gap: 12px; }
+  .tab {
+    box-sizing: border-box;
+    flex: 1 1 0;
+    min-height: 76px;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+    font-family: inherit;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid rgba(10, 61, 54, 0.16);
+    border-radius: var(--radius-lg);
+    transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+  }
+  .tab:hover { background: rgba(255, 255, 255, 0.6); }
+  .tab[aria-selected="true"] { background: rgba(255, 255, 255, 0.85); border-color: var(--deep-600); }
+  .tab img { max-height: 44px; max-width: 54px; width: auto; height: auto; display: block; }
+  .tab-text { display: flex; flex-direction: column; gap: 2px; }
+  .tab-name { font-family: var(--font-display); font-size: 16px; font-weight: 500; color: var(--deep-700); }
+  .tab[aria-selected="true"] .tab-name { font-weight: 700; }
+  .tab-trade { font-size: 13.5px; color: var(--text-faint); }
+
+  .rule { height: 1px; background: rgba(10, 61, 54, 0.14); }
+
+  .panel { display: flex; flex-direction: column; gap: 40px; margin: 0; }
+  .panel[hidden] { display: none; }
+  /* Lets the address bar jump to a story without the nav covering the heading. */
+  .anchor { display: block; height: 0; scroll-margin-top: 120px; }
+
+  h2 {
+    margin: 0;
+    font-size: 44px;
+    line-height: 1.06;
+    letter-spacing: -0.025em;
+    color: var(--deep-700);
+  }
+
+  .label {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--deep-600);
+  }
+  .problem-label { color: var(--pink-600); }
+
+  .intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; }
+  .col { display: flex; flex-direction: column; gap: 10px; }
+  .col p { margin: 0; font-size: 17px; line-height: 1.6; color: var(--text-soft); }
+  .cost { font-weight: 600; color: var(--deep-700) !important; }
+
+  .how { display: grid; grid-template-columns: minmax(0, 1fr); gap: 56px; align-items: start; }
+  .how-with-shot { grid-template-columns: minmax(0, 1fr) 400px; }
+  .steps-col { display: flex; flex-direction: column; gap: 20px; }
+
+  .steps { margin: 0; padding: 0; list-style: none; counter-reset: step; display: flex; flex-direction: column; }
+  .steps li { display: flex; gap: 20px; counter-increment: step; }
+  .steps li:not(:last-child) { padding-bottom: 26px; position: relative; }
+  .steps li:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    left: 19px;
+    top: 46px;
+    bottom: 0;
+    width: 2px;
+    background: var(--teal-200);
+  }
+  .num {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    background: var(--deep-700);
+    color: var(--paper-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .num::before { content: counter(step); }
+  .step-text { display: flex; flex-direction: column; gap: 4px; padding-top: 7px; }
+  .step-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--deep-700); }
+  .step-text span:last-child { font-size: 16px; line-height: 1.5; color: var(--text-soft); }
+
+  .shot { margin: 0; }
+  .shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--stone-200);
+  }
+
+  .result {
+    box-sizing: border-box;
+    background: #f8f9f9;
+    border: 1px solid var(--stone-200);
+    border-radius: var(--radius-lg);
+    padding: 32px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .result ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 40px;
+  }
+  .result li { display: flex; gap: 12px; align-items: flex-start; font-size: 16px; line-height: 1.5; color: var(--text-soft); }
+  .result svg { flex-shrink: 0; margin-top: 2px; color: var(--deep-600); }
+
+  .quote { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  .quote blockquote {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--deep-700);
+  }
+  .quote figcaption { font-size: 14.5px; color: var(--text-faint); }
+
+  .cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    border-top: 1px solid rgba(10, 61, 54, 0.14);
+    padding-top: 32px;
+  }
+  .cta p { margin: 0; font-family: var(--font-display); font-size: 26px; font-weight: 700; color: var(--deep-700); }
+  .pill {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    box-sizing: border-box;
+    padding: 0 30px;
+    border-radius: var(--radius-pill);
+    background: var(--amber-500);
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--deep-950);
+    text-decoration: none;
+    transition: background var(--dur-fast) var(--ease-out);
+  }
+  .pill:hover { background: var(--amber-400); }
+
+  @media (max-width: 820px) {
+    .case-studies { padding: 96px 16px 140px; }
+    .card { padding: 32px 20px; gap: 32px; }
+    .tabs { flex-direction: column; }
+    .panel { gap: 32px; }
+    h2 { font-size: 32px; }
+    .intro { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    .how, .how-with-shot { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+    .result { padding: 24px 22px; }
+    .result ul { grid-template-columns: minmax(0, 1fr); }
+    .quote blockquote { font-size: 19px; }
+    .cta { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .cta p { font-size: 22px; }
+  }
+</style>
