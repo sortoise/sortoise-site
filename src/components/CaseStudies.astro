@@ -229,9 +229,9 @@ const studies = [
     max-width: var(--container-max);
     margin: 0 auto;
     box-sizing: border-box;
-    /* The same see-through panel as the Home FAQ, so the tortoise marks show through. */
-    background: rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(10, 61, 54, 0.13);
+    /* The off grey from the Home FAQ's open answer, solid so the tortoise marks stop at the card. */
+    background: #f8f9f9;
+    border: 1px solid var(--stone-200);
     border-radius: var(--radius-xl);
     padding: 48px 56px;
     display: flex;
@@ -256,8 +256,8 @@ const studies = [
     border-radius: var(--radius-lg);
     transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
   }
-  .tab:hover { background: rgba(255, 255, 255, 0.6); }
-  .tab[aria-selected="true"] { background: rgba(255, 255, 255, 0.85); border-color: var(--deep-600); }
+  .tab:hover { background: rgba(255, 255, 255, 0.55); }
+  .tab[aria-selected="true"] { background: #ffffff; border-color: var(--deep-600); }
   .tab img { max-height: 44px; max-width: 54px; width: auto; height: auto; display: block; }
   .tab-text { display: flex; flex-direction: column; gap: 2px; }
   .tab-name { font-family: var(--font-display); font-size: 16px; font-weight: 500; color: var(--deep-700); }
@@ -334,7 +334,7 @@ const studies = [
     box-sizing: border-box;
     border: 1.5px dashed var(--stone-200);
     border-radius: var(--radius-lg);
-    background: #f8f9f9;
+    background: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -354,7 +354,7 @@ const studies = [
 
   .result {
     box-sizing: border-box;
-    background: #f8f9f9;
+    background: #ffffff;
     border: 1px solid var(--stone-200);
     border-radius: var(--radius-lg);
     padding: 32px 36px;
