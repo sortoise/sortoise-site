@@ -3,7 +3,7 @@
 // One see-through panel in the FAQ style. Both clients sit as tabs across the top and the story
 // swaps underneath. A link from Home (/case-study#d-w-jenkins) opens that client's story.
 // Each story: name and trade, headline, who they are and the problem side by side, a numbered
-// "how it works now" list with room for one screenshot, the result as four ticks, the client's own
+// "how it works now" list with two screenshots beside it, the result as four ticks, the client's own
 // words, then a question and the amber Get It Sorted button.
 // Quotes are the clients' own, taken from the reviews on the Home page. Do not change without Aaron.
 
@@ -29,8 +29,12 @@ const studies = [
       { title: "Back at the desk", text: "Everything lands in the desktop app, job by job." },
       { title: "One click", text: "Invoice, H&S and photos come out as one pack, ready for the contractor." },
     ],
-    // Set src (and webp, when there is one) as soon as Aaron sends the screenshot.
-    shot: null,
+    // Two screenshots beside the steps. Each one shows a labelled box until its `src` is set,
+    // so the layout is final and the pictures drop straight in.
+    shots: [
+      { src: null, alt: "The site app on Wayne's phone", label: "The site app on Wayne's phone", height: 250 },
+      { src: null, alt: "The desktop app and the invoice pack", label: "The desktop app and invoice pack", height: 190 },
+    ],
     results: [
       "8 to 12 hours of repetitive admin back every week",
       "Analytics on all the work he has completed",
@@ -61,7 +65,10 @@ const studies = [
       { title: "Proposal sent", text: "The proposal is built and sent from the CRM, and lands in the customer's email to read and sign." },
       { title: "Chased and signed", text: "Text and email reminders go out, with a call scheduled if there is no answer after five days. Once it is signed the job moves through to install." },
     ],
-    shot: null,
+    shots: [
+      { src: null, alt: "The lead inbox", label: "The lead inbox", height: 300 },
+      { src: null, alt: "The survey app on site", label: "The survey app on site", height: 228 },
+    ],
     results: [
       "Every lead and missed call in one place",
       "He knows exactly where each sale sits",
@@ -128,7 +135,7 @@ const studies = [
 
         <div class="rule"></div>
 
-        <div class={s.shot ? "how how-with-shot" : "how"}>
+        <div class="how">
           <div class="steps-col">
             <p class="label">{s.stepLabel}</p>
             <ol class="steps">
@@ -143,11 +150,17 @@ const studies = [
               ))}
             </ol>
           </div>
-          {s.shot && (
-            <figure class="shot">
-              <img src={s.shot.src} alt={s.shot.alt} loading="lazy" />
-            </figure>
-          )}
+          <div class="shots">
+            {s.shots.map((shot) => (
+              shot.src ? (
+                <figure class="shot">
+                  <img src={shot.src} alt={shot.alt} loading="lazy" />
+                </figure>
+              ) : (
+                <div class="shot-box" style={`height: ${shot.height}px`}>{shot.label}</div>
+              )
+            ))}
+          </div>
         </div>
 
         <div class="result">
@@ -282,8 +295,7 @@ const studies = [
   .col p { margin: 0; font-size: 17px; line-height: 1.6; color: var(--text-soft); }
   .cost { font-weight: 600; color: var(--deep-700) !important; }
 
-  .how { display: grid; grid-template-columns: minmax(0, 1fr); gap: 56px; align-items: start; }
-  .how-with-shot { grid-template-columns: minmax(0, 1fr) 400px; }
+  .how { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 56px; align-items: start; }
   .steps-col { display: flex; flex-direction: column; gap: 20px; }
 
   .steps { margin: 0; padding: 0; list-style: none; counter-reset: step; display: flex; flex-direction: column; }
@@ -317,6 +329,20 @@ const studies = [
   .step-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--deep-700); }
   .step-text span:last-child { font-size: 16px; line-height: 1.5; color: var(--text-soft); }
 
+  .shots { display: flex; flex-direction: column; gap: 16px; }
+  .shot-box {
+    box-sizing: border-box;
+    border: 1.5px dashed var(--stone-200);
+    border-radius: var(--radius-lg);
+    background: #f8f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 16px;
+    font-size: 14px;
+    color: var(--text-faint);
+  }
   .shot { margin: 0; }
   .shot img {
     display: block;
@@ -393,7 +419,8 @@ const studies = [
     .panel { gap: 32px; }
     h2 { font-size: 32px; }
     .intro { grid-template-columns: minmax(0, 1fr); gap: 28px; }
-    .how, .how-with-shot { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+    .how { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+    .shot-box { height: 200px !important; }
     .result { padding: 24px 22px; }
     .result ul { grid-template-columns: minmax(0, 1fr); }
     .quote blockquote { font-size: 19px; }
