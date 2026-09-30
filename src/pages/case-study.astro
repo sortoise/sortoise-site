@@ -23,6 +23,18 @@ import Footer from "../components/Footer.astro";
       </p>
       <a class="note" href="/services">See what we build</a>
     </header>
+    <section class="film" aria-label="Sortoise video">
+      <div class="frame">
+        <picture>
+          <source srcset="/images/video-poster.webp" type="image/webp" />
+          <img src="/images/video-poster.jpg" alt="Aaron at his desk, from the Sortoise video" width="1600" height="900" />
+        </picture>
+        <!-- Decorative until the real video exists: swap for a button and the embed when it does. -->
+        <span class="play" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#ffffff"><path d="M8 5l12 7-12 7z" /></svg>
+        </span>
+      </div>
+    </section>
     <main>
       <CaseStudies />
     </main>
@@ -71,8 +83,37 @@ import Footer from "../components/Footer.astro";
     align-items: center;
   }
 
+  .film { padding: 8px 24px 0; }
+  .frame {
+    position: relative;
+    max-width: 960px;
+    margin: 0 auto;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background: var(--deep-950);
+  }
+  .frame img { display: block; width: 100%; height: 100%; object-fit: cover; opacity: 0.86; }
+  .play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 76px;
+    height: 76px;
+    border-radius: var(--radius-pill);
+    background: var(--pink-500);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 4px;
+    box-shadow: var(--shadow-raised);
+  }
+
   @media (max-width: 820px) {
     .nav-wrap { padding: 12px 16px 0; }
+    .film { padding: 8px 16px 0; }
+    .play { width: 58px; height: 58px; }
     .head { padding: 48px 16px 16px; gap: 18px; }
     .head h1 { font-size: 38px; }
     .sub { font-size: 17px; }
