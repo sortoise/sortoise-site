@@ -1,6 +1,355 @@
 ---
-// Holding page. Replace this file with the real page when it is built.
-import ComingSoonPage from "../components/ComingSoonPage.astro";
+// Services page, built 11 Oct 2026 from the Sortoise Services canvas: layout B (pick a service)
+// with the "How it goes" card from layout C in place of the service ladder.
+// Nav, a plain heading, then four blocks: the service picker (see ServicePicker.astro), how it
+// goes in our clients' own words, the platforms we connect with, and the closing call to action.
+// Every quote is the client's own, taken from their review on Home. Do not change them, or add
+// facts about clients, without Aaron.
+// The footer sits outside the page ground so it stays flat.
+import PageShell from "../layouts/PageShell.astro";
+import SiteNav from "../components/SiteNav.astro";
+import ServicePicker from "../components/ServicePicker.astro";
+import Footer from "../components/Footer.astro";
+
+// The three steps. Each one is backed by a sentence from a client's review.
+const steps = [
+  {
+    title: "We learn how you really work",
+    quote:
+      "Aaron and Luke took the time to understand how we actually work on site, then built a system where the lads fill in a form on the job and the invoice is created and stored automatically with the right rates and VAT already applied.",
+    name: "Wayne",
+    company: "D W Jenkins",
+    photo: "/images/wayne-dw-jenkins.webp",
+    photoFallback: "/images/wayne-dw-jenkins.jpg",
+  },
+  {
+    title: "We build one place to run it from",
+    quote:
+      "What Aaron and Luke have built does everything we want and more, and we can finally do everything from one application.",
+    name: "Steve",
+    company: "Cavity Wall Extraction UK",
+    photo: "/images/steve-cavity-wall.webp",
+    photoFallback: "/images/steve-cavity-wall.jpg",
+  },
+  {
+    title: "We stay on hand afterwards",
+    quote:
+      "The service and aftercare was excellent, and anything I need I can just WhatsApp the lads and it's sorted straight away.",
+    name: "Steve",
+    company: "Cavity Wall Extraction UK",
+    photo: "/images/steve-cavity-wall.webp",
+    photoFallback: "/images/steve-cavity-wall.jpg",
+  },
+];
+
+// The same platform logos as the Home hero, from public/logos. "mark" logos are square icons and
+// "word" logos are wordmarks, so they get different heights and read as the same size.
+// The width and height are each file's real size, so the page keeps their space while they load.
+const logos = [
+  { name: "Supabase", file: "supabase.png", kind: "mark", w: 117, h: 120 },
+  { name: "Firebase", file: "firebase.png", kind: "mark", w: 96, h: 120 },
+  { name: "Zapier", file: "zapier.png", kind: "mark", w: 119, h: 120 },
+  { name: "n8n", file: "n8n.png", kind: "word", w: 442, h: 120 },
+  { name: "Make", file: "make.png", kind: "word", w: 569, h: 118 },
+  { name: "GitHub", file: "github.png", kind: "mark", w: 123, h: 120 },
+  { name: "Stripe", file: "stripe.png", kind: "word", w: 288, h: 120 },
+  { name: "Twilio", file: "twilio.png", kind: "word", w: 403, h: 120 },
+  { name: "Google Drive", file: "google-drive.png", kind: "mark", w: 138, h: 120 },
+  { name: "Google Calendar", file: "google-calendar.png", kind: "word", w: 399, h: 120 },
+  { name: "Calendly", file: "calendly.png", kind: "word", w: 216, h: 53 },
+  { name: "Microsoft Teams", file: "microsoft-teams.png", kind: "mark", w: 129, h: 120 },
+  { name: "Xero", file: "xero.png", kind: "mark", w: 124, h: 120 },
+  { name: "VS Code", file: "vs-code.png", kind: "mark", w: 119, h: 120 },
+];
+
+// Every Get It Sorted opens the quiz page, which also holds the plain enquiry form.
+const ctaHref = "/quiz";
 ---
 
-<ComingSoonPage name="Services" />
+<PageShell
+  title="Services | Sortoise"
+  description="Custom software and web apps, custom CRMs, business admin and process automation, and mobile apps for the field. See what each one covers and where we have already built it."
+>
+  <div class="page-ground">
+    <div class="nav-wrap">
+      <SiteNav />
+    </div>
+    <header class="head">
+      <h1>What we can build for your business</h1>
+      <p class="sub">
+        Four kinds of tool cover most of what we build. Pick one below to see what it covers and
+        where we have already built it.
+      </p>
+      <a class="note" href="/case-study">See what we have built</a>
+    </header>
+    <main>
+      <ServicePicker />
+
+      <section class="block" aria-labelledby="how-head">
+        <div class="card how">
+          <div class="lead">
+            <p class="eyebrow">How it goes</p>
+            <h2 id="how-head">What working with us is like, in our clients' words.</h2>
+            <p class="small">
+              It starts with a free discovery call, which is a chance for us to understand your
+              business and work out whether we can get it sorted.
+            </p>
+          </div>
+          <ol class="steps">
+            {steps.map((s) => (
+              <li class="step">
+                <span class="num" aria-hidden="true"></span>
+                <h3>{s.title}</h3>
+                <figure class="said">
+                  <blockquote>&ldquo;{s.quote}&rdquo;</blockquote>
+                  <figcaption>
+                    <picture>
+                      <source srcset={s.photo} type="image/webp" />
+                      <img src={s.photoFallback} alt="" width="40" height="40" loading="lazy" decoding="async" />
+                    </picture>
+                    <span><strong>{s.name}</strong>, {s.company}</span>
+                  </figcaption>
+                </figure>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section class="block" aria-labelledby="connect-head">
+        <div class="connect">
+          <h2 id="connect-head" class="eyebrow">We connect with</h2>
+          <ul class="logos">
+            {logos.map((l) => (
+              <li>
+                <img src={`/logos/${l.file}`} alt={l.name} class={l.kind} width={l.w} height={l.h} loading="lazy" decoding="async" />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section class="block last" aria-labelledby="closing-head">
+        <div class="card closing">
+          <h2 id="closing-head" class="closing-head">Got a task that eats up your week?</h2>
+          <p>
+            Share it with us on a free discovery call. It's a chance for us to understand your
+            business and work out whether we can get it sorted.
+          </p>
+          <div class="actions">
+            <a href={ctaHref} class="pill">Get It Sorted</a>
+            <a href="/case-study" class="see">See what we have built</a>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <!-- The footer sits outside the page-ground wrapper, so the tortoise pattern never shows behind it. -->
+  <Footer />
+</PageShell>
+
+<style>
+  .page-ground { width: 100%; min-height: 100vh; }
+  .nav-wrap { max-width: 1240px; margin: 0 auto; padding: 20px 60px 0; }
+
+  /* Same heading block as the Case Study and About pages: 72px above, 24px below. */
+  .head {
+    padding: 72px 24px 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+  }
+  .head h1 {
+    margin: 0;
+    max-width: 900px;
+    font-size: 58px;
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    color: var(--deep-700);
+    text-wrap: balance;
+  }
+  .sub { margin: 0; max-width: 620px; font-size: 19px; line-height: 1.55; color: var(--text-soft); text-wrap: pretty; }
+  .note {
+    font-size: 16px;
+    color: var(--text-link);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Each section brings its own 96px on top. The last one adds 140px before the footer. */
+  .block { padding: 96px 24px 0; font-family: var(--font-body); }
+  .block.last { padding-bottom: 140px; }
+
+  /* Cards sit on the solid off grey, so the tortoise marks stop at the card. Boxes inside go white. */
+  .card {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    box-sizing: border-box;
+    background: #f8f9f9;
+    border: 1px solid var(--stone-200);
+    border-radius: var(--radius-xl);
+    padding: 48px 56px;
+  }
+
+  .eyebrow {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 11.5px;
+    font-weight: 600;
+    line-height: 1.55;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--deep-600);
+  }
+  h2 {
+    margin: 0;
+    font-size: 34px;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    color: var(--deep-700);
+    text-wrap: balance;
+  }
+
+  /* How it goes: the heading on the left, the three steps on the right. */
+  .how { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 56px; align-items: start; }
+  .lead { display: flex; flex-direction: column; gap: 14px; }
+  .small { margin: 0; font-size: 16px; line-height: 1.55; color: var(--text-soft); text-wrap: pretty; }
+
+  .steps { list-style: none; margin: 0; padding: 0; counter-reset: step; display: flex; flex-direction: column; gap: 16px; }
+  .step {
+    counter-increment: step;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid var(--stone-200);
+    border-radius: var(--radius-lg);
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 6px 18px;
+    align-items: start;
+  }
+  .num {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-pill);
+    background: var(--deep-700);
+    color: var(--paper-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .num::before { content: counter(step); }
+  .step h3 {
+    margin: 0;
+    padding-top: 8px;
+    font-size: 20px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--deep-700);
+  }
+  .said { grid-column: 2; margin: 6px 0 0; display: flex; flex-direction: column; gap: 14px; }
+  .said blockquote {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 17.5px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--deep-700);
+    text-wrap: pretty;
+  }
+  .said figcaption { display: flex; align-items: center; gap: 10px; font-size: 14px; line-height: 1.4; color: var(--text-faint); }
+  .said img { display: block; width: 40px; height: 40px; border-radius: var(--radius-pill); object-fit: cover; }
+  .said strong { font-weight: 600; color: var(--deep-700); }
+
+  /* We connect with: bare on the ground, no card. */
+  .connect { max-width: var(--container-max); margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 22px; }
+  .logos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: 920px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 24px 46px;
+  }
+  .logos li { display: flex; align-items: center; }
+  .logos img { display: block; width: auto; }
+  .logos img.mark { height: 36px; }
+  .logos img.word { height: 26px; }
+
+  /* The closing call to action, the same one that ends the About page. */
+  .closing { padding: 64px 56px; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
+  .closing-head { font-size: 40px; line-height: 1.06; max-width: 780px; }
+  .closing p { margin: 0; max-width: 620px; font-size: 18px; line-height: 1.55; color: var(--text-soft); text-wrap: pretty; }
+  .actions { margin-top: 8px; display: flex; align-items: center; gap: 28px; }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    box-sizing: border-box;
+    padding: 0 30px;
+    border-radius: var(--radius-pill);
+    background: var(--amber-500);
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--deep-950);
+    text-decoration: none;
+    transition: background var(--dur-fast) var(--ease-out);
+  }
+  .pill:hover { background: var(--amber-400); color: var(--deep-950); }
+  .see {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 15px;
+    color: var(--deep-700);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+  .see:hover { color: var(--deep-600); }
+  .pill:focus-visible, .see:focus-visible, .note:focus-visible { outline: 3px solid var(--deep-600); outline-offset: 3px; }
+
+  /* Small laptops and tablets on their side: the steps drop under their heading. */
+  @media (max-width: 1080px) {
+    .how { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+    .lead { max-width: 640px; }
+  }
+
+  @media (max-width: 820px) {
+    /* Phone: everything goes to one column. */
+    .nav-wrap { padding: 12px 16px 0; }
+    .head { padding: 48px 16px 16px; gap: 18px; }
+    .head h1 { font-size: 38px; }
+    .sub { font-size: 17px; }
+    .block { padding: 96px 16px 0; }
+    .block.last { padding-bottom: 140px; }
+    .card { padding: 32px 20px; }
+    h2 { font-size: 28px; }
+    .how { gap: 28px; }
+    .step { grid-template-columns: minmax(0, 1fr); padding: 20px 18px; gap: 10px; }
+    .step h3 { padding-top: 4px; }
+    .said { grid-column: 1; margin-top: 0; }
+    .said blockquote { font-size: 17px; }
+    .logos { gap: 18px 28px; }
+    .logos img.mark { height: 30px; }
+    .logos img.word { height: 22px; }
+    .closing { padding: 40px 20px; }
+    .closing-head { font-size: 30px; }
+    .closing p { font-size: 17px; }
+    .actions { flex-direction: column; gap: 4px; }
+  }
+</style>
