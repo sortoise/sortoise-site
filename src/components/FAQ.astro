@@ -1,7 +1,7 @@
 ---
 // Home FAQ section, locked 19 Sep 2026 (FAQ board on the Sortoise Home canvas, variation F2).
 // One see-through white panel inside the 1120 cap, so the page ground shows through it.
-// Heading, a line pointing at the free discovery call, then the questions split by hairlines.
+// Heading, a line pointing at the message form on the quiz page, then the questions split by hairlines.
 // Click a question and its answer opens on a light grey card. Opening one closes the others.
 // The first question starts open.
 // This is the last section before the footer, so it brings the 96px top gap AND the 140px bottom gap.
@@ -38,15 +38,15 @@ const faqs = [
   },
 ];
 
-// Where the "free discovery call" link goes. Point this at the Calendly booking once that is set up.
-const ctaHref = "#";
+// Where the "Send us a message" link goes: the quiz page, opened on its message tab.
+const ctaHref = "/quiz#message";
 ---
 
 <section id="faq" class="faq">
   <div class="panel">
     <div class="intro">
       <h2>FAQ</h2>
-      <p>Can't see yours? <a href={ctaHref}>Ask us on a free discovery call</a><span class="stop">.</span></p>
+      <p>Can't see yours? <a href={ctaHref}>Send us a message</a><span class="stop">.</span></p>
     </div>
 
     <div class="list">
@@ -159,7 +159,7 @@ const ctaHref = "#";
     .intro { gap: 12px; }
     h2 { font-size: 30px; }
     .intro p { font-size: 16px; }
-    /* On a phone the discovery call link drops onto its own line. */
+    /* On a phone the message link drops onto its own line. */
     .intro a { display: block; }
     .stop { display: none; }
     summary { font-size: 17px; padding: 12px 0; gap: 16px; }

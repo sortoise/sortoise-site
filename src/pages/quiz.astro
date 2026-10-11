@@ -1,0 +1,1061 @@
+---
+// Quiz page, built 11 Oct 2026 from the "B. Two tabs in one card" boards on the Sortoise Quiz canvas.
+// This is where every Get It Sorted on the site lands. There is no book a call button.
+//
+// One card with two tabs:
+//   "Find your hours" is the quiz. Five questions, one at a time, then an estimate of the hours a
+//   week the visitor could get back, with the working shown and a short form beside it.
+//   "Send a message" is the plain enquiry form, for people who just want to get in touch.
+//   A link to /quiz#message opens the page on the message tab (the Home FAQ uses it).
+//
+// THE MATHS. The visitor ticks the jobs they still do by hand and sets the hours a week for each.
+// We add those up and show half to three quarters of the total as a range, rounded down to the
+// nearest half hour. Nothing is pre-filled, so every figure starts from their own answer.
+// Under two hours in total we say so plainly instead of showing a range.
+//
+// THE FORMS. Both go through Netlify Forms (the data-netlify attribute) and arrive by email.
+// The quiz form sends the answers and the estimate along with the contact details.
+// Form detection has to be switched on in Netlify (Forms, Enable form detection) before the
+// deploy, or Netlify does not pick the forms up.
+//
+// To change a question's answers, edit the lists below. Only the jobs and their hours feed the
+// number. The other three questions tell us who we are replying to.
+import PageShell from "../layouts/PageShell.astro";
+import SiteNav from "../components/SiteNav.astro";
+import Footer from "../components/Footer.astro";
+
+// Question 1: what kind of business.
+const kinds = ["A trade, out on site", "A service, run from an office", "A shop or online store", "Something else"];
+
+// Question 2: how many people.
+const sizes = ["Just me", "2 to 5", "6 to 20", "More than 20"];
+
+// Question 3: where the day to day lives. They can tick more than one.
+const places = [
+  "Paper and notebooks",
+  "Spreadsheets",
+  "WhatsApp, texts and email",
+  "Software that only does part of the job",
+  "In my head",
+];
+
+// Question 4: the jobs still done by hand. Question 5 asks the hours for each one they tick.
+// The id is only used behind the scenes, so the label can be reworded freely.
+const jobs = [
+  { id: "quotes", label: "Quotes and proposals" },
+  { id: "invoices", label: "Invoices" },
+  { id: "chasing", label: "Chasing payments and unsigned quotes" },
+  { id: "booking", label: "Booking jobs and sending reminders" },
+  { id: "leads", label: "Following up new leads" },
+  { id: "retyping", label: "Typing the same details into more than one place" },
+  { id: "records", label: "Job records and reports" },
+  { id: "compliance", label: "Compliance paperwork" },
+];
+
+// The hours the plus and minus buttons step through.
+const hourSteps = [0, 0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20];
+
+// The share of their hours we count: half at the low end, three quarters at the high end.
+// If these change, change the sentence under "How we worked it out" to match.
+const share = { low: 0.5, high: 0.75 };
+
+// Shown only if a form fails to send. Same address as the footer.
+const email = "sortoisesolutions@gmail.com";
+---
+
+<PageShell
+  title="How many hours a week could you get back? | Sortoise"
+  description="Answer five quick questions about how your business runs and see an estimate of the hours a week you could get back. Or skip the quiz and send us a message."
+>
+  <div class="page-ground">
+    <div class="nav-wrap">
+      <SiteNav />
+    </div>
+    <header class="head">
+      <h1>How many hours a week could you get back?</h1>
+      <p class="sub">
+        Answer five quick questions about how your business runs and we'll show you an estimate
+        straight away. The working is shown, and you don't need to give an email to see it.
+      </p>
+      <a class="note" href="#message" data-open-message>Rather just send us a message?</a>
+    </header>
+    <main>
+      <section class="block" aria-label="The quiz and the message form">
+        <div
+          class="card"
+          id="quiz"
+          data-quiz
+          data-hours={JSON.stringify(hourSteps)}
+          data-low={share.low}
+          data-high={share.high}
+        >
+          <span class="anchor" id="message"></span>
+
+          <div class="tabs" role="tablist" aria-label="Find your hours or send a message">
+            <button type="button" class="tab" role="tab" id="tab-quiz" data-tab="quiz" aria-controls="panel-quiz" aria-selected="true">
+              <span class="tab-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+              </span>
+              <span class="tab-text">
+                <span class="tab-name">Find your hours</span>
+                <span class="tab-sub">Five questions, about a minute</span>
+              </span>
+            </button>
+            <button type="button" class="tab" role="tab" id="tab-message" data-tab="message" aria-controls="panel-message" aria-selected="false" tabindex="-1">
+              <span class="tab-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="M3.5 7.5l8.5 6 8.5-6" /></svg>
+              </span>
+              <span class="tab-text">
+                <span class="tab-name">Send a message</span>
+                <span class="tab-sub">Skip the quiz and get in touch</span>
+              </span>
+            </button>
+          </div>
+
+          <div class="rule"></div>
+
+          <!-- THE QUIZ -->
+          <div class="panel" id="panel-quiz" data-panel="quiz" role="tabpanel" aria-labelledby="tab-quiz">
+            <noscript>
+              <p class="no-script">The quiz needs JavaScript switched on. You can still send us a message with the form below.</p>
+            </noscript>
+
+            <div class="ask" data-ask>
+              <div class="progress">
+                <div class="bars" aria-hidden="true">
+                  <span class="bar is-on"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                </div>
+                <p class="count" data-count aria-live="polite">Question 1 of 5</p>
+              </div>
+
+              <div class="step" data-step role="radiogroup" aria-labelledby="q-business">
+                <h2 id="q-business" tabindex="-1">What kind of business do you run?</h2>
+                <div class="opts">
+                  {kinds.map((label) => (
+                    <label class="opt">
+                      <input type="radio" name="q-business" value={label} />
+                      <span class="mark round" aria-hidden="true"></span>
+                      <span class="opt-text">{label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div class="step" data-step role="radiogroup" aria-labelledby="q-people" hidden>
+                <h2 id="q-people" tabindex="-1">How many people work in it, you included?</h2>
+                <div class="opts">
+                  {sizes.map((label) => (
+                    <label class="opt">
+                      <input type="radio" name="q-people" value={label} />
+                      <span class="mark round" aria-hidden="true"></span>
+                      <span class="opt-text">{label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div class="step" data-step role="group" aria-labelledby="q-places" hidden>
+                <div class="q-head">
+                  <h2 id="q-places" tabindex="-1">Where does the day to day live right now?</h2>
+                  <p class="hint">Tick every one that applies.</p>
+                </div>
+                <div class="opts">
+                  {places.map((label) => (
+                    <label class="opt">
+                      <input type="checkbox" name="q-places" value={label} />
+                      <span class="mark square" aria-hidden="true">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+                      </span>
+                      <span class="opt-text">{label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div class="step" data-step role="group" aria-labelledby="q-jobs" hidden>
+                <div class="q-head">
+                  <h2 id="q-jobs" tabindex="-1">Which of these still get done by hand?</h2>
+                  <p class="hint">Tick every one that applies.</p>
+                </div>
+                <div class="opts">
+                  {jobs.map((job) => (
+                    <label class="opt">
+                      <input type="checkbox" name="q-jobs" value={job.id} data-label={job.label} />
+                      <span class="mark square" aria-hidden="true">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+                      </span>
+                      <span class="opt-text">{job.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div class="step" data-step role="group" aria-labelledby="q-hours" hidden>
+                <div class="q-head">
+                  <h2 id="q-hours" tabindex="-1">Roughly how many hours a week does each one take?</h2>
+                  <p class="hint">Go on a normal week, not your worst one.</p>
+                </div>
+                <div class="rows">
+                  {jobs.map((job) => (
+                    <div class="row" data-row={job.id} hidden>
+                      <span class="row-label">{job.label}</span>
+                      <div class="stepper">
+                        <button type="button" class="step-btn" data-move="-1" aria-label={`Fewer hours for ${job.label}`}>
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12" /></svg>
+                        </button>
+                        <span class="value is-zero" data-value aria-live="polite">0 hrs</span>
+                        <button type="button" class="step-btn" data-move="1" aria-label={`More hours for ${job.label}`}>
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12M12 6v12" /></svg>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  <div class="running">
+                    <span class="running-label">Your total so far</span>
+                    <span class="running-value" data-running>0 hours a week</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="nav-row">
+                <button type="button" class="text-btn" data-back hidden>Back</button>
+                <button type="button" class="next" data-next disabled>Next</button>
+              </div>
+            </div>
+
+            <div class="result" data-result hidden>
+              <div class="result-main">
+                <div class="estimate">
+                  <p class="kicker">Your estimate</p>
+                  <div class="range-block" data-range-block>
+                    <h2 class="lead-in" id="result-head" tabindex="-1">You could get back</h2>
+                    <p class="figure">
+                      <span class="range" data-range></span>
+                      <span class="unit">hours a week</span>
+                    </p>
+                    <p class="said">That's out of the <span data-total-long></span> you told us these jobs take by hand.</p>
+                  </div>
+                  <div class="low-block" data-low-block hidden>
+                    <h2 class="low-head" id="low-head" tabindex="-1">An hour a week or less</h2>
+                    <p class="said">
+                      On these answers there isn't much to win back yet, so a custom tool would struggle
+                      to pay for itself. If there's a bigger job we didn't list, tell us about it in the form.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="working">
+                  <h3>How we worked it out</h3>
+                  <ul class="sum">
+                    {jobs.map((job) => (
+                      <li data-sum={job.id} hidden>
+                        <span>{job.label}</span>
+                        <span class="sum-value" data-sum-value></span>
+                      </li>
+                    ))}
+                    <li class="sum-total">
+                      <span>Your total by hand</span>
+                      <span class="sum-value" data-total-short></span>
+                    </li>
+                  </ul>
+                  <p>
+                    We count half to three quarters of your total, because a tool rarely takes a job away
+                    completely. It's an estimate, not a promise.
+                  </p>
+                  <p>
+                    For comparison, the invoicing tool we built for Wayne at D W Jenkins took 8 to 12 hours
+                    a week off his desk. <a href="/case-study#d-w-jenkins">Read Wayne's story</a>
+                  </p>
+                </div>
+
+                <div class="again">
+                  <button type="button" class="text-btn" data-edit>Change my answers</button>
+                  <button type="button" class="text-btn" data-restart>Start again</button>
+                </div>
+              </div>
+
+              <div class="form-box">
+                <form class="form" name="quiz" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-form="quiz">
+                  <input type="hidden" name="form-name" value="quiz" />
+                  <input type="hidden" name="subject" data-remove-prefix value="New quiz result from sortoise.com" />
+                  <p hidden>
+                    <label>Leave this one empty: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+                  </p>
+                  <div class="form-head">
+                    <h3>Want us to take a proper look?</h3>
+                    <p>
+                      Send us your answers and we'll come back to you about a free discovery call. It's a
+                      chance for us to understand your business and work out whether we can get it sorted.
+                    </p>
+                  </div>
+                  <div class="fields">
+                    <label class="field">Name<input type="text" name="name" autocomplete="name" required /></label>
+                    <label class="field">Email<input type="email" name="email" autocomplete="email" required /></label>
+                    <label class="field wide">Phone (optional)<input type="tel" name="phone" autocomplete="tel" /></label>
+                    <label class="field wide">The job that eats your week (optional)<textarea name="message" rows="3"></textarea></label>
+                  </div>
+                  <!-- Filled in by the script just before sending, so the answers arrive with the details. -->
+                  <input type="hidden" name="estimate" />
+                  <input type="hidden" name="total-hours-by-hand" />
+                  <input type="hidden" name="jobs-and-hours" />
+                  <input type="hidden" name="business" />
+                  <input type="hidden" name="people" />
+                  <input type="hidden" name="where-it-lives" />
+                  <div class="send-row">
+                    <button type="submit" class="pill">Get It Sorted</button>
+                    <span class="send-note">Your answers and your estimate go with it.</span>
+                  </div>
+                  <p class="error" data-error role="alert" hidden>
+                    That didn't send. Try again, or email us at <a href={`mailto:${email}`}>{email}</a>.
+                  </p>
+                  <p class="privacy">We only use your details to reply to you. <a href="/privacy-policy">Privacy policy</a></p>
+                </form>
+                <div class="thanks" data-thanks tabindex="-1" hidden>
+                  <span class="thanks-tick" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+                  </span>
+                  <div class="thanks-text">
+                    <h3>Thanks, that's with us.</h3>
+                    <p>Aaron or Luke will be in touch about your free discovery call.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- THE PLAIN ENQUIRY -->
+          <div class="panel message" id="panel-message" data-panel="message" role="tabpanel" aria-labelledby="tab-message" hidden>
+            <div class="message-lead">
+              <h2>Tell us what you need sorted</h2>
+              <p>
+                Skip the quiz and send us a message. If it looks like something we can help with, the next
+                step is a free discovery call.
+              </p>
+              <ul class="ticks">
+                <li>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+                  <span>The discovery call is completely free</span>
+                </li>
+                <li>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+                  <span>You talk to Aaron or Luke, the people who do the work</span>
+                </li>
+              </ul>
+            </div>
+            <div class="form-box">
+              <form class="form" name="enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-form="enquiry">
+                <input type="hidden" name="form-name" value="enquiry" />
+                <input type="hidden" name="subject" data-remove-prefix value="New message from sortoise.com" />
+                <p hidden>
+                  <label>Leave this one empty: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+                </p>
+                <div class="fields">
+                  <label class="field">Name<input type="text" name="name" autocomplete="name" required /></label>
+                  <label class="field">Email<input type="email" name="email" autocomplete="email" required /></label>
+                  <label class="field wide">Phone (optional)<input type="tel" name="phone" autocomplete="tel" /></label>
+                  <label class="field wide">What do you need sorted?<textarea name="message" rows="4" required></textarea></label>
+                </div>
+                <div class="send-row">
+                  <button type="submit" class="pill">Get It Sorted</button>
+                  <span class="privacy">We only use your details to reply to you. <a href="/privacy-policy">Privacy policy</a></span>
+                </div>
+                <p class="error" data-error role="alert" hidden>
+                  That didn't send. Try again, or email us at <a href={`mailto:${email}`}>{email}</a>.
+                </p>
+              </form>
+              <div class="thanks" data-thanks tabindex="-1" hidden>
+                <span class="thanks-tick" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+                </span>
+                <div class="thanks-text">
+                  <h3>Thanks, that's with us.</h3>
+                  <p>Aaron or Luke will be in touch.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Without JavaScript the quiz cannot run, so the tabs go and the message form shows instead. -->
+          <noscript>
+            <style is:inline>
+              #quiz .tabs, #quiz .tabs + .rule, #quiz [data-ask] { display: none !important; }
+              #quiz [data-panel="message"] { display: grid !important; }
+            </style>
+          </noscript>
+        </div>
+      </section>
+    </main>
+  </div>
+  <!-- The footer sits outside the page-ground wrapper, so the tortoise pattern never shows behind it. -->
+  <Footer />
+</PageShell>
+
+<script>
+  // Runs the quiz page: the two tabs, the five questions, the hours maths and both forms.
+  document.querySelectorAll<HTMLElement>("[data-quiz]").forEach((root) => {
+    const one = <T extends HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
+    const all = <T extends HTMLElement>(sel: string) => Array.from(root.querySelectorAll<T>(sel));
+
+    // The numbers come from the lists at the top of the page file.
+    const HOURS: number[] = JSON.parse(root.dataset.hours || "[0]");
+    const LOW = Number(root.dataset.low) || 0.5;
+    const HIGH = Number(root.dataset.high) || 0.75;
+
+    // ---- The two tabs ----
+    const tabs = all<HTMLButtonElement>("[data-tab]");
+    const panels = all("[data-panel]");
+    const showTab = (id: string, focus = false) => {
+      tabs.forEach((t) => {
+        const on = t.dataset.tab === id;
+        t.setAttribute("aria-selected", on ? "true" : "false");
+        t.tabIndex = on ? 0 : -1;
+        if (on && focus) t.focus();
+      });
+      panels.forEach((p) => { p.hidden = p.dataset.panel !== id; });
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => showTab(t.dataset.tab!));
+      t.addEventListener("keydown", (e) => {
+        if (!["ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp"].includes(e.key)) return;
+        e.preventDefault();
+        const move = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : -1;
+        showTab(tabs[(i + move + tabs.length) % tabs.length].dataset.tab!, true);
+      });
+    });
+    // /quiz#message opens on the message tab, and so does the link under the heading.
+    const fromHash = () => { if (location.hash === "#message") showTab("message"); };
+    fromHash();
+    window.addEventListener("hashchange", fromHash);
+    document.querySelectorAll("[data-open-message]").forEach((a) => a.addEventListener("click", () => showTab("message")));
+
+    // ---- The five questions ----
+    const steps = all("[data-step]");
+    const bars = all(".bar");
+    const count = one("[data-count]");
+    const back = one<HTMLButtonElement>("[data-back]");
+    const next = one<HTMLButtonElement>("[data-next]");
+    const ask = one("[data-ask]");
+    const result = one("[data-result]");
+    const last = steps.length - 1;
+    let step = 0;
+    // Where each job sits on the HOURS list. A job nobody has touched is at 0.
+    const position = new Map<string, number>();
+
+    const ticked = (name: string) => all<HTMLInputElement>(`input[name="${name}"]:checked`);
+    const jobsOn = () => ticked("q-jobs").map((box) => box.value);
+    const hoursOf = (id: string) => HOURS[position.get(id) || 0];
+    const total = () => jobsOn().reduce((sum, id) => sum + hoursOf(id), 0);
+
+    const short = (h: number) => (h === 0 ? "0 hrs" : h === 0.5 ? "30 min" : h === 1 ? "1 hr" : `${h} hrs`);
+    const long = (h: number) => (h === 0.5 ? "half an hour a week" : h === 1 ? "1 hour a week" : `${h} hours a week`);
+    // Rounds down to the nearest half hour, so the estimate never flatters.
+    const halves = (n: number) => Math.floor(n * 2) / 2;
+
+    // Each question needs an answer before Next wakes up. The last one needs some hours.
+    const answered = () =>
+      [
+        ticked("q-business").length > 0,
+        ticked("q-people").length > 0,
+        ticked("q-places").length > 0,
+        jobsOn().length > 0,
+        total() > 0,
+      ][step];
+
+    const drawHours = () => {
+      const on = new Set(jobsOn());
+      all("[data-row]").forEach((row) => {
+        const id = row.dataset.row!;
+        const h = hoursOf(id);
+        const value = row.querySelector<HTMLElement>("[data-value]")!;
+        row.hidden = !on.has(id);
+        value.textContent = short(h);
+        value.classList.toggle("is-zero", h === 0);
+      });
+      one("[data-running]").textContent = long(total());
+    };
+
+    const draw = () => {
+      steps.forEach((s, i) => { s.hidden = i !== step; });
+      bars.forEach((b, i) => b.classList.toggle("is-on", i <= step));
+      count.textContent = `Question ${step + 1} of ${steps.length}`;
+      back.hidden = step === 0;
+      next.textContent = step === last ? "Show my hours" : "Next";
+      if (step === last) drawHours();
+      next.disabled = !answered();
+    };
+
+    // Brings the top of the question or the result back into view if it has scrolled off, then
+    // moves the keyboard to the new heading so a screen reader reads it out.
+    const settle = (block: HTMLElement, heading: HTMLElement | null) => {
+      if (block.getBoundingClientRect().top < 0) block.scrollIntoView({ block: "start" });
+      heading?.focus({ preventScroll: true });
+    };
+
+    root.addEventListener("change", (e) => {
+      const input = e.target as HTMLInputElement;
+      if (!input.matches('input[name^="q-"]')) return;
+      // Marks the chosen answers. A radio clears its neighbours.
+      all<HTMLInputElement>(`input[name="${input.name}"]`).forEach((i) => i.closest(".opt")?.classList.toggle("is-on", i.checked));
+      next.disabled = !answered();
+    });
+
+    root.addEventListener("click", (e) => {
+      const button = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-move]");
+      if (!button) return;
+      const id = button.closest<HTMLElement>("[data-row]")!.dataset.row!;
+      const moved = (position.get(id) || 0) + Number(button.dataset.move);
+      position.set(id, Math.max(0, Math.min(HOURS.length - 1, moved)));
+      drawHours();
+      next.disabled = !answered();
+    });
+
+    const showResult = () => {
+      const sum = total();
+      const low = halves(sum * LOW);
+      const high = halves(sum * HIGH);
+      const enough = sum >= 2;
+      const range = `${low} to ${high}`;
+      const on = new Set(jobsOn());
+
+      one("[data-range-block]").hidden = !enough;
+      one("[data-low-block]").hidden = enough;
+      const figure = one("[data-range]");
+      figure.textContent = range;
+      // Long results such as "12.5 to 18.5" are set a little smaller so they fit a phone.
+      figure.classList.toggle("is-long", range.length > 8 && range.length <= 10);
+      figure.classList.toggle("is-longer", range.length > 10);
+      one("[data-total-long]").textContent = long(sum);
+      one("[data-total-short]").textContent = short(sum);
+      all("[data-sum]").forEach((li) => {
+        const id = li.dataset.sum!;
+        li.hidden = !on.has(id);
+        li.querySelector<HTMLElement>("[data-sum-value]")!.textContent = short(hoursOf(id));
+      });
+
+      ask.hidden = true;
+      result.hidden = false;
+      settle(result, one(enough ? "#result-head" : "#low-head"));
+    };
+
+    // Shows a question and puts the keyboard on its heading.
+    const goTo = (n: number) => {
+      step = Math.max(0, Math.min(last, n));
+      result.hidden = true;
+      ask.hidden = false;
+      draw();
+      settle(ask, steps[step].querySelector<HTMLElement>("h2"));
+    };
+
+    next.addEventListener("click", () => {
+      if (!answered()) return;
+      if (step === last) showResult();
+      else goTo(step + 1);
+    });
+    back.addEventListener("click", () => goTo(step - 1));
+    one("[data-edit]").addEventListener("click", () => goTo(last));
+    one("[data-restart]").addEventListener("click", () => {
+      all<HTMLInputElement>('input[name^="q-"]').forEach((i) => { i.checked = false; i.closest(".opt")?.classList.remove("is-on"); });
+      position.clear();
+      goTo(0);
+    });
+
+    // ---- The two forms ----
+    // Writes the quiz answers into the hidden boxes of the quiz form, so they arrive in the email.
+    const fillAnswers = (form: HTMLFormElement) => {
+      const sum = total();
+      const set = (name: string, value: string) => {
+        const box = form.querySelector<HTMLInputElement>(`input[name="${name}"]`);
+        if (box) box.value = value;
+      };
+      set("estimate", sum >= 2 ? `${halves(sum * LOW)} to ${halves(sum * HIGH)} hours a week` : "An hour a week or less");
+      set("total-hours-by-hand", short(sum));
+      set("jobs-and-hours", ticked("q-jobs").map((box) => `${box.dataset.label}: ${short(hoursOf(box.value))}`).join("; "));
+      set("business", ticked("q-business").map((i) => i.value).join("; "));
+      set("people", ticked("q-people").map((i) => i.value).join("; "));
+      set("where-it-lives", ticked("q-places").map((i) => i.value).join("; "));
+    };
+
+    all<HTMLFormElement>("form[data-form]").forEach((form) => {
+      const thanks = form.parentElement!.querySelector<HTMLElement>("[data-thanks]")!;
+      const error = form.querySelector<HTMLElement>("[data-error]")!;
+      const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (form.dataset.form === "quiz") fillAnswers(form);
+        const body = new URLSearchParams();
+        new FormData(form).forEach((value, key) => { if (typeof value === "string") body.append(key, value); });
+        body.set("form-name", form.getAttribute("name") || "");
+        button.disabled = true;
+        error.hidden = true;
+        try {
+          const sent = await fetch("/", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: body.toString(),
+          });
+          if (!sent.ok) throw new Error(String(sent.status));
+          form.hidden = true;
+          thanks.hidden = false;
+          thanks.focus({ preventScroll: true });
+        } catch {
+          error.hidden = false;
+          button.disabled = false;
+        }
+      });
+    });
+
+    draw();
+  });
+</script>
+
+<style>
+  .page-ground { width: 100%; min-height: 100vh; }
+  .nav-wrap { max-width: 1240px; margin: 0 auto; padding: 20px 60px 0; }
+
+  /* Anything switched off by the script stays off, whatever layout it normally has. */
+  .card [hidden] { display: none !important; }
+
+  /* Same heading block as the Case Study and About pages: 72px above, 24px below. */
+  .head {
+    padding: 72px 24px 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+  }
+  .head h1 {
+    margin: 0;
+    max-width: 820px;
+    font-size: 58px;
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    color: var(--deep-700);
+    text-wrap: balance;
+  }
+  .sub { margin: 0; max-width: 640px; font-size: 19px; line-height: 1.55; color: var(--text-soft); text-wrap: balance; }
+  .note {
+    font-size: 16px;
+    color: var(--text-link);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* The only section on the page: 96px above, 140px below before the footer. */
+  .block { padding: 96px 24px 140px; font-family: var(--font-body); }
+
+  /* The card sits on the solid off grey, so the tortoise marks stop at it. Boxes inside go white. */
+  .card {
+    position: relative;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    box-sizing: border-box;
+    background: #f8f9f9;
+    border: 1px solid var(--stone-200);
+    border-radius: var(--radius-xl);
+    padding: 48px 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    scroll-margin-top: 104px;
+  }
+  /* Lets /quiz#message land on the card without the nav covering the tabs. */
+  .anchor { position: absolute; top: 0; left: 0; height: 0; scroll-margin-top: 104px; }
+
+  /* The two tabs, the same pattern as the Case Study page. */
+  .tabs { display: flex; gap: 12px; }
+  .tab {
+    box-sizing: border-box;
+    flex: 1 1 0;
+    min-height: 76px;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+    font-family: inherit;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid rgba(10, 61, 54, 0.16);
+    border-radius: var(--radius-lg);
+    transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+  }
+  .tab:hover { background: rgba(255, 255, 255, 0.55); }
+  .tab[aria-selected="true"] { background: #ffffff; border-color: var(--deep-600); }
+  .tab-icon {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: var(--teal-200);
+    color: var(--deep-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tab-text { display: flex; flex-direction: column; gap: 2px; }
+  .tab-name { font-family: var(--font-display); font-size: 16px; font-weight: 500; color: var(--deep-700); }
+  .tab[aria-selected="true"] .tab-name { font-weight: 700; }
+  .tab-sub { font-size: 13.5px; color: var(--text-faint); }
+
+  .rule { height: 1px; background: rgba(10, 61, 54, 0.14); }
+
+  h2 {
+    margin: 0;
+    font-size: 34px;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    color: var(--deep-700);
+  }
+  h2:focus { outline: none; }
+  h3 { margin: 0; color: var(--deep-700); }
+
+  /* The questions sit in a narrower column in the middle of the card. */
+  .ask {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 760px;
+    min-height: 430px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+  /* When Next brings a question or the result back into view, it stops clear of the nav. */
+  .ask, .result { scroll-margin-top: 104px; }
+  .progress { display: flex; flex-direction: column; gap: 10px; padding-bottom: 28px; }
+  .bars { display: flex; gap: 6px; }
+  .bar { flex: 1 1 0; height: 6px; border-radius: 999px; background: var(--stone-200); transition: background var(--dur-med) var(--ease-out); }
+  .bar.is-on { background: var(--deep-700); }
+  .count { margin: 0; font-size: 14px; font-weight: 600; color: var(--deep-600); }
+
+  .step { display: flex; flex-direction: column; gap: 24px; }
+  .q-head { display: flex; flex-direction: column; gap: 10px; }
+  .hint { margin: 0; font-size: 16px; line-height: 1.55; color: var(--text-soft); }
+
+  /* Each answer is a white box. The real radio or checkbox sits invisibly over its drawn mark. */
+  .opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .opt {
+    position: relative;
+    box-sizing: border-box;
+    min-height: 64px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    background: #ffffff;
+    border: 1px solid var(--stone-200);
+    border-radius: var(--radius-md);
+    transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+  }
+  .opt:hover { border-color: var(--stone-300); }
+  .opt.is-on { border-color: var(--deep-700); box-shadow: inset 0 0 0 1px var(--deep-700); }
+  .opt input {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    transform: translateY(-50%);
+    opacity: 0;
+    cursor: pointer;
+  }
+  .mark {
+    box-sizing: border-box;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 1.5px solid var(--stone-300);
+    color: #ffffff;
+  }
+  .mark.round { border-radius: 999px; }
+  .mark.round::after { content: ""; width: 10px; height: 10px; border-radius: 999px; background: var(--deep-700); opacity: 0; }
+  .mark.square { border-radius: 6px; }
+  .mark.square svg { opacity: 0; }
+  .opt input:checked + .mark { border-color: var(--deep-700); }
+  .opt input:checked + .mark.round::after { opacity: 1; }
+  .opt input:checked + .mark.square { background: var(--deep-700); }
+  .opt input:checked + .mark.square svg { opacity: 1; }
+  .opt input:focus-visible + .mark { outline: 3px solid var(--deep-500); outline-offset: 3px; }
+  .opt-text { font-size: 16px; font-weight: 500; line-height: 1.35; color: var(--stone-900); }
+  .opt.is-on .opt-text { font-weight: 600; }
+
+  /* The hours question: one row per job they ticked, with a minus, the hours and a plus. */
+  .rows { display: flex; flex-direction: column; margin-top: -8px; }
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(10, 61, 54, 0.14);
+  }
+  .row-label { font-size: 17px; line-height: 1.35; color: var(--stone-900); }
+  .stepper { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .step-btn {
+    box-sizing: border-box;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: #ffffff;
+    border: 1px solid var(--stone-200);
+    border-radius: 999px;
+    color: var(--deep-700);
+    transition: border-color var(--dur-fast) var(--ease-out);
+  }
+  .step-btn:hover { border-color: var(--deep-600); }
+  .value {
+    min-width: 78px;
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--deep-700);
+  }
+  .value.is-zero { color: var(--stone-500); }
+  .running { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; padding-top: 16px; }
+  .running-label { font-size: 15px; color: var(--text-faint); }
+  .running-value { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--deep-700); }
+
+  /* Back on the left, Next on the right, pinned to the bottom of the question area. */
+  .nav-row { margin-top: auto; padding-top: 32px; display: flex; align-items: center; gap: 16px; }
+  .text-btn {
+    min-height: 44px;
+    padding: 0;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: 15px;
+    color: var(--deep-700);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+  .text-btn:hover { color: var(--deep-600); }
+  .next {
+    margin-left: auto;
+    box-sizing: border-box;
+    min-height: 48px;
+    padding: 0 28px;
+    cursor: pointer;
+    background: var(--deep-700);
+    border: none;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--paper-100);
+    transition: background var(--dur-fast) var(--ease-out);
+  }
+  .next:hover { background: var(--deep-600); }
+  .next:disabled { background: var(--stone-100); color: var(--stone-500); cursor: not-allowed; }
+
+  /* The result: the number and the working on the left, the form on the right. */
+  .result { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
+  .result-main { display: flex; flex-direction: column; gap: 24px; }
+  .estimate { display: flex; flex-direction: column; gap: 10px; }
+  .kicker { margin: 0; font-size: 14px; font-weight: 600; color: var(--deep-600); }
+  .range-block, .low-block { display: flex; flex-direction: column; gap: 8px; }
+  .lead-in { font-size: 24px; font-weight: 600; line-height: 1.2; letter-spacing: 0; }
+  .figure { margin: 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 14px; }
+  .range {
+    font-family: var(--font-display);
+    font-size: 76px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+    color: var(--deep-700);
+  }
+  .unit { font-family: var(--font-display); font-size: 26px; font-weight: 600; color: var(--deep-700); }
+  .low-head { font-size: 44px; line-height: 1.06; }
+  .said { margin: 0; padding-top: 6px; font-size: 17px; line-height: 1.55; color: var(--text-soft); }
+
+  .working {
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid var(--stone-200);
+    border-radius: var(--radius-lg);
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .working h3 { font-size: 17px; line-height: 1.3; letter-spacing: 0; }
+  .working p { margin: 0; font-size: 15px; line-height: 1.55; color: var(--text-soft); }
+  .working a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  .sum { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  .sum li { display: flex; justify-content: space-between; gap: 16px; font-size: 15.5px; line-height: 1.5; color: var(--text-soft); }
+  .sum-value { flex-shrink: 0; }
+  .sum .sum-total { margin-top: 4px; padding-top: 8px; border-top: 1px solid var(--stone-200); font-weight: 700; color: var(--deep-700); }
+  .again { display: flex; gap: 24px; }
+
+  /* Both forms sit in the same white box. */
+  .form-box {
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid var(--stone-200);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+  }
+  .form { display: flex; flex-direction: column; gap: 18px; margin: 0; }
+  .form-head { display: flex; flex-direction: column; gap: 8px; }
+  .form-head h3, .thanks h3 { font-size: 24px; line-height: 1.15; letter-spacing: -0.01em; }
+  .form-head p, .thanks p { margin: 0; font-size: 16px; line-height: 1.55; color: var(--text-soft); }
+  .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .field { display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; color: var(--stone-900); }
+  .field.wide { grid-column: 1 / -1; }
+  .field input, .field textarea {
+    box-sizing: border-box;
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid var(--stone-200);
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--stone-900);
+    transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+  }
+  .field input { height: 48px; padding: 0 14px; }
+  .field textarea { min-height: 92px; padding: 12px 14px; line-height: 1.5; resize: vertical; }
+  .message .field textarea { min-height: 116px; }
+  .field input:focus, .field textarea:focus { outline: none; border-color: var(--deep-600); box-shadow: var(--focus-shadow); }
+  .send-row { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 20px; }
+  .send-note { font-size: 14.5px; line-height: 1.45; color: var(--text-faint); }
+  .privacy { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--text-faint); }
+  .privacy a { color: var(--stone-500); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  .error {
+    margin: 0;
+    padding: 12px 14px;
+    border-radius: var(--radius-md);
+    background: var(--status-error-bg);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--stone-900);
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    box-sizing: border-box;
+    padding: 0 30px;
+    cursor: pointer;
+    background: var(--amber-500);
+    border: none;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--deep-950);
+    transition: background var(--dur-fast) var(--ease-out);
+  }
+  .pill:hover { background: var(--amber-400); }
+  .pill:disabled { opacity: 0.6; cursor: progress; }
+
+  .thanks { display: flex; align-items: flex-start; gap: 16px; padding: 8px 0; }
+  .thanks:focus { outline: none; }
+  .thanks-tick {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    background: var(--deep-700);
+    color: var(--paper-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .thanks-text { display: flex; flex-direction: column; gap: 6px; }
+
+  /* The plain enquiry: a few words on the left, the form on the right. */
+  .message { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 56px; align-items: start; }
+  .message-lead { display: flex; flex-direction: column; gap: 16px; padding-top: 8px; }
+  .message-lead p { margin: 0; font-size: 17px; line-height: 1.6; color: var(--text-soft); }
+  .ticks { list-style: none; margin: 0; padding: 6px 0 0; display: flex; flex-direction: column; gap: 10px; }
+  .ticks li { display: flex; gap: 12px; align-items: flex-start; font-size: 16px; line-height: 1.5; color: var(--text-soft); }
+  .ticks svg { flex-shrink: 0; margin-top: 2px; color: var(--deep-600); }
+
+  .no-script { margin: 0 0 24px; font-size: 16px; line-height: 1.55; color: var(--text-soft); }
+
+  .tab:focus-visible, .next:focus-visible, .text-btn:focus-visible, .step-btn:focus-visible, .pill:focus-visible,
+  .note:focus-visible, .working a:focus-visible, .privacy a:focus-visible, .error a:focus-visible {
+    outline: 3px solid var(--deep-500);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 820px) {
+    /* Phone: one column throughout, taken from the "B on a phone" boards. */
+    .nav-wrap { padding: 12px 16px 0; }
+    .head { padding: 48px 16px 16px; gap: 18px; }
+    .head h1 { font-size: 38px; }
+    .sub { font-size: 17px; }
+    .block { padding: 96px 16px 140px; }
+    .card { padding: 32px 20px; gap: 32px; }
+
+    /* The tabs stay side by side as two short buttons, so the first question sits higher up. */
+    .tabs { gap: 10px; }
+    .tab { min-height: 52px; padding: 8px 10px; justify-content: center; text-align: center; }
+    .tab-icon, .tab-sub { display: none; }
+    .tab-name { font-size: 15px; line-height: 1.25; }
+
+    h2 { font-size: 28px; }
+    .ask { min-height: 0; }
+    .progress { padding-bottom: 22px; }
+    .bars { gap: 5px; }
+    .step { gap: 20px; }
+    .q-head { gap: 8px; }
+    .opts { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+    .opt { min-height: 56px; padding: 12px 16px; gap: 12px; }
+    .opt input { left: 16px; }
+
+    /* Each job name sits on its own line with the plus and minus under it. */
+    .rows { margin-top: -8px; }
+    .row { flex-direction: column; align-items: stretch; gap: 8px; padding: 14px 0; }
+    .row-label { font-size: 16px; font-weight: 500; }
+    .stepper { justify-content: flex-end; }
+    .running-value { font-size: 19px; }
+    .nav-row { padding-top: 28px; }
+
+    /* One column: the number, the working, the form, then the two links last. */
+    .result { display: flex; flex-direction: column; gap: 24px; }
+    .result-main { display: contents; }
+    .again { order: 2; }
+    .lead-in { font-size: 22px; }
+    .figure { gap: 0 10px; }
+    .range { font-size: 64px; }
+    .range.is-long { font-size: 56px; }
+    .range.is-longer { font-size: 46px; }
+    .unit { font-size: 22px; }
+    .low-head { font-size: 34px; }
+    .said { font-size: 16px; }
+    .working { padding: 22px 20px; }
+    .sum { gap: 8px; }
+    .sum li { font-size: 15px; line-height: 1.4; }
+    .form-box { padding: 24px 20px; }
+    .form { gap: 16px; }
+    .form-head h3, .thanks h3 { font-size: 22px; }
+    .fields { grid-template-columns: minmax(0, 1fr); }
+    .send-row { flex-direction: column; align-items: stretch; }
+    .pill { width: 100%; }
+
+    .message { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    .message-lead { gap: 14px; padding-top: 0; }
+    .message-lead p { font-size: 16px; }
+  }
+</style>
