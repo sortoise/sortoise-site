@@ -1,6 +1,326 @@
 ---
-// Holding page. Replace this file with the real page when it is built.
-import ComingSoonPage from "../components/ComingSoonPage.astro";
+// About page, built 11 Oct 2026 from the "C. Story first" board on the Sortoise About canvas.
+// Nav, a plain heading, then three cards on the off grey: why we started (with "Why a tortoise?"),
+// who you work with (Aaron and Luke), and where we are (South Wales) with the closing call to action.
+// The only facts about Aaron and Luke are their names and roles. Do not add more without Aaron.
+// The footer sits outside the page ground so it stays flat.
+import PageShell from "../layouts/PageShell.astro";
+import SiteNav from "../components/SiteNav.astro";
+import Footer from "../components/Footer.astro";
+
+const people = [
+  {
+    name: "Aaron Davies",
+    role: "Marketing & Development",
+    photo: "/images/aaron-davies.webp",
+    photoFallback: "/images/aaron-davies.jpg",
+  },
+  {
+    name: "Luke Jenkins",
+    role: "Customer Relationships & Development",
+    photo: "/images/luke-jenkins.webp",
+    photoFallback: "/images/luke-jenkins.jpg",
+  },
+];
+
+// Point at the Calendly booking when that is set up, same as every other Get It Sorted.
+const ctaHref = "#";
 ---
 
-<ComingSoonPage name="About" />
+<PageShell
+  title="About | Sortoise"
+  description="Sortoise is a small software workshop run by two founders, Aaron and Luke. We both build, so the people you talk to are the people who do the work."
+>
+  <div class="page-ground">
+    <div class="nav-wrap">
+      <SiteNav />
+    </div>
+    <header class="head">
+      <h1>The two people behind Sortoise</h1>
+      <p class="sub">
+        Sortoise is a small software workshop run by Aaron and Luke. We are both founders and we
+        both build, so the people you talk to are the people who do the work.
+      </p>
+      <a class="note" href="/case-study">See what we have built</a>
+    </header>
+    <main>
+      <section class="block" aria-labelledby="why-head">
+        <div class="card stack">
+          <div class="why">
+            <div class="lead">
+              <p class="eyebrow">Why we started</p>
+              <h2 id="why-head">
+                Off-the-shelf software makes you fit the software. We build software that fits you.
+              </h2>
+            </div>
+            <div class="copy">
+              <p>
+                Sortoise builds custom software for small businesses. It is not a subscription you
+                have to bend your business around. It is one tool, built for the way you already
+                work, that takes the job off your desk and keeps doing it.
+              </p>
+              <p>
+                Most businesses have one process that eats a day a week, the kind of job that lives
+                on spreadsheets, on paper or in your head. We build the thing that does it for you.
+              </p>
+            </div>
+          </div>
+          <div class="tortoise">
+            <h3>Why a tortoise?</h3>
+            <p>
+              Sortoise is tortoise with an S, and the name is the point. A tortoise is not slow, it
+              is unhurried, and it never sprints because it never has to. You don't want a fast
+              business, you want one that never has to rush.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="block" aria-labelledby="who-head">
+        <div class="card who">
+          <div class="lead">
+            <p class="eyebrow">Who you work with</p>
+            <h2 id="who-head">Two founders, and both of us build.</h2>
+            <p class="small">
+              There is nobody in the middle. The people on your discovery call are the people who
+              build your tool.
+            </p>
+          </div>
+          <ul class="people">
+            {people.map((p) => (
+              <li class="person">
+                <picture>
+                  <source srcset={p.photo} type="image/webp" />
+                  <img src={p.photoFallback} alt={p.name} width="640" height="640" loading="lazy" decoding="async" />
+                </picture>
+                <div class="caption">
+                  <span class="name">{p.name}</span>
+                  <span class="title">Founder</span>
+                  <span class="role">{p.role}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section class="block last" aria-labelledby="where-head">
+        <div class="card stack">
+          <div class="where">
+            <picture>
+              <source srcset="/images/billboard-parc-tawe.webp" type="image/webp" />
+              <img
+                src="/images/billboard-parc-tawe.jpg"
+                alt="The Sortoise advert on the big screen at Parc Tawe, Swansea"
+                width="1600"
+                height="1000"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+            <div class="lead">
+              <p class="eyebrow">Where we are</p>
+              <h2 id="where-head">Based in South Wales, serving UK businesses.</h2>
+              <p class="body">
+                You might have seen us at Parc Tawe in Swansea. What you might not know is that we
+                work with businesses right across the UK.
+              </p>
+            </div>
+          </div>
+          <div class="rule"></div>
+          <div class="closing">
+            <h2 class="closing-head">Got a task that eats up your week?</h2>
+            <p>
+              Share it with us on a free discovery call. It's a chance for us to understand your
+              business and work out whether we can get it sorted.
+            </p>
+            <div class="actions">
+              <a href={ctaHref} class="pill">Get It Sorted</a>
+              <a href="/services" class="see">See what we build</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <!-- The footer sits outside the page-ground wrapper, so the tortoise pattern never shows behind it. -->
+  <Footer />
+</PageShell>
+
+<style>
+  .page-ground { width: 100%; min-height: 100vh; }
+  .nav-wrap { max-width: 1240px; margin: 0 auto; padding: 20px 60px 0; }
+
+  /* Same heading block as the Case Study page: 72px above, 24px below. */
+  .head {
+    padding: 72px 24px 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+  }
+  .head h1 {
+    margin: 0;
+    max-width: 900px;
+    font-size: 58px;
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    color: var(--deep-700);
+  }
+  .sub { margin: 0; max-width: 620px; font-size: 19px; line-height: 1.55; color: var(--text-soft); }
+  .note {
+    font-size: 16px;
+    color: var(--text-link);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Each section brings its own 96px on top. The last one adds 140px before the footer. */
+  .block { padding: 96px 24px 0; font-family: var(--font-body); }
+  .block.last { padding-bottom: 140px; }
+
+  /* Cards sit on the solid off grey, so the tortoise marks stop at the card. Boxes inside go white. */
+  .card {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    box-sizing: border-box;
+    background: #f8f9f9;
+    border: 1px solid var(--stone-200);
+    border-radius: var(--radius-xl);
+    padding: 48px 56px;
+  }
+  .stack { display: flex; flex-direction: column; gap: 40px; }
+
+  .lead { display: flex; flex-direction: column; gap: 14px; }
+  .eyebrow {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--deep-600);
+  }
+  h2 {
+    margin: 0;
+    font-size: 34px;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    color: var(--deep-700);
+  }
+
+  /* Why we started */
+  .why { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 56px; align-items: start; }
+  .copy { display: flex; flex-direction: column; gap: 16px; padding-top: 30px; }
+  .copy p, .tortoise p, .body { margin: 0; font-size: 17px; line-height: 1.6; color: var(--text-soft); }
+  .tortoise {
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid var(--stone-200);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 40px;
+    align-items: center;
+  }
+  .tortoise h3 {
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--deep-700);
+  }
+
+  /* Who you work with */
+  .who { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 56px; align-items: center; }
+  .small { margin: 0; font-size: 16px; line-height: 1.55; color: var(--text-soft); }
+  .people { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .person {
+    box-sizing: border-box;
+    min-width: 0;
+    background: #ffffff;
+    border: 1px solid var(--stone-200);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .person img { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; border-radius: var(--radius-md); object-fit: cover; }
+  .caption { display: flex; flex-direction: column; gap: 3px; }
+  .name { font-family: var(--font-display); font-size: 20px; font-weight: 600; color: var(--deep-700); }
+  .title { font-size: 14px; font-weight: 600; color: var(--deep-600); }
+  .role { font-size: 15px; line-height: 1.5; color: var(--stone-900); }
+
+  /* Where we are, then the closing call to action */
+  .where { display: grid; grid-template-columns: 440px minmax(0, 1fr); gap: 48px; align-items: center; }
+  .where img { display: block; width: 100%; height: auto; border-radius: var(--radius-lg); }
+  .rule { height: 1px; background: rgba(10, 61, 54, 0.14); }
+  .closing { display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
+  .closing-head { font-size: 40px; line-height: 1.06; max-width: 780px; }
+  .closing p { margin: 0; max-width: 620px; font-size: 18px; line-height: 1.55; color: var(--text-soft); }
+  .actions { margin-top: 8px; display: flex; align-items: center; gap: 28px; }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    box-sizing: border-box;
+    padding: 0 30px;
+    border-radius: var(--radius-pill);
+    background: var(--amber-500);
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--deep-950);
+    text-decoration: none;
+    transition: background var(--dur-fast) var(--ease-out);
+  }
+  .pill:hover { background: var(--amber-400); color: var(--deep-950); }
+  .see {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 15px;
+    color: var(--deep-700);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+  .see:hover { color: var(--deep-600); }
+  .pill:focus-visible, .see:focus-visible, .note:focus-visible { outline: 3px solid var(--deep-600); outline-offset: 3px; }
+
+  @media (max-width: 820px) {
+    /* Phone: everything goes to one column, the two founders stay side by side. */
+    .nav-wrap { padding: 12px 16px 0; }
+    .head { padding: 48px 16px 16px; gap: 18px; }
+    .head h1 { font-size: 38px; }
+    .sub { font-size: 17px; }
+    .block { padding: 96px 16px 0; }
+    .block.last { padding-bottom: 140px; }
+    .card { padding: 32px 20px; }
+    .stack { gap: 32px; }
+    h2 { font-size: 28px; }
+    .why { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+    .copy { padding-top: 0; }
+    .copy p, .tortoise p, .body { font-size: 16px; }
+    .tortoise { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 22px 20px; }
+    .tortoise h3 { font-size: 22px; }
+    .who { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    .people { gap: 12px; }
+    .person { padding: 12px; gap: 12px; }
+    .name { font-size: 17px; }
+    .title { font-size: 13px; }
+    .role { font-size: 13.5px; line-height: 1.45; }
+    .where { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    .closing-head { font-size: 30px; }
+    .closing p { font-size: 17px; }
+    .actions { flex-direction: column; gap: 4px; }
+  }
+</style>
