@@ -42,12 +42,12 @@ const services = [
     name: "Custom software and web apps",
     icon: "software",
     headline: "One tool for the job that eats your week.",
-    lead: "When a job lives across spreadsheets, paper and your own memory, we build one tool that holds all of it. It is shaped around the way you already work, so the tool fits the job instead of the job bending to fit the tool.",
+    lead: "If a job's spread across spreadsheets, paper and your own memory, we build one tool that holds all of it. It's built around the way you already work, so you're not changing how you do things to suit the software.",
     points: [
-      { title: "Quoting, proposals and invoicing", text: "Quotes and proposals go out from one screen, and the invoice is ready the moment the work is done." },
+      { title: "Quoting, proposals and invoicing", text: "Quotes and proposals go out from one screen, and the invoice is ready as soon as the work's done." },
       { title: "Data pulled between your platforms", text: "Your systems pass information to each other, so nobody types the same details in twice." },
-      { title: "Formatting and storage in one place", text: "Everything is kept in one place and laid out the way you need to read it." },
-      { title: "Manual admin hours taken out", text: "The hours that go on copying, checking and chasing come back to you." },
+      { title: "Formatting and storage in one place", text: "Everything's kept in one place, laid out the way you actually need it." },
+      { title: "Manual admin hours taken out", text: "You get back the hours that go on copying things over, checking and chasing." },
     ],
     client: "dwj",
     built: "Wayne's site app feeds a desktop app that turns the invoice, the health and safety document and the photo evidence into one pack at the click of a button.",
@@ -59,15 +59,15 @@ const services = [
     name: "Custom CRMs",
     icon: "crm",
     headline: "A CRM built around the way you sell.",
-    lead: "A general CRM can leave you with tabs you never use and the chasing still to do by hand. Ours is built around your own sales process, so leads are answered, booked in and followed up as part of how the tool works.",
+    lead: "An off-the-shelf CRM can leave you with tabs you never use and all the chasing still to do by hand. We build yours around how you actually sell, so leads get answered, booked in and followed up without you having to remember.",
     points: [
       { title: "Text and email follow-up", text: "New leads hear from you straight away, and the reminders and chasers go out on their own." },
       { title: "Calendar booking and reminders", text: "Appointments go straight into your calendar, and the customer gets a reminder before you arrive." },
       { title: "Pipelines and customer journeys", text: "You can see where every sale sits, and each lead moves on as the work gets done." },
-      { title: "Existing customers kept warm", text: "Past customers keep hearing from you, so repeat work does not rely on your memory." },
+      { title: "Existing customers kept warm", text: "Past customers keep hearing from you, so repeat work doesn't rely on your memory." },
     ],
     client: "cwe",
-    built: "Steve's form leads and missed calls land in one inbox, new leads get a text telling them to expect a call, and proposals are sent and chased from the CRM until they are signed.",
+    built: "Steve's form leads and missed calls land in one inbox, new leads get a text telling them to expect a call, and proposals are sent and chased from the CRM until they're signed.",
     quote: "Our leads land in the CRM, email and text reminders are sent from within the CRM just by clicking a button, and customers are chased automatically.",
     ctaLine: "Leads slipping through the cracks in your business?",
   },
@@ -79,9 +79,9 @@ const services = [
     lead: "Some jobs follow the same steps every week and still eat hours, because somebody has to sit down and do them. We turn those steps into a tool that does the job for you and keeps the paperwork in order as it goes.",
     points: [
       { title: "Repetitive admin done for you", text: "The jobs you do the same way every week get done without you sitting down to them." },
-      { title: "Complex tasks handled by logic", text: "Where a job has more than one possible outcome, the tool follows your rules to reach the right one." },
-      { title: "Documents created for you", text: "Answer a few questions and the document is written, laid out and stored." },
-      { title: "Compliance paperwork in order", text: "Every record is kept against the job it belongs to, ready when someone asks for it." },
+      { title: "Complex tasks handled by logic", text: "If a job can go more than one way, the tool follows your rules to get to the right answer." },
+      { title: "Documents created for you", text: "Answer a few questions and the document's written, laid out and saved." },
+      { title: "Compliance paperwork in order", text: "Every record's kept against its job, ready for when someone asks to see it." },
     ],
     client: "dwj",
     built: "Wayne answers a short Q&A and the site-specific health and safety document is written for him, and his invoices are created with the right rates and VAT already applied.",
@@ -92,13 +92,13 @@ const services = [
     id: "mobile-apps",
     name: "Mobile apps for the field",
     icon: "mobile",
-    headline: "Recorded once, on the job.",
-    lead: "When the work happens away from the desk, the paperwork usually waits until the end of the day. We build apps your team can use on site, so what they record goes straight into your system and the office is already up to date.",
+    headline: "Get the paperwork done before you leave site.",
+    lead: "When the work's away from the desk, the paperwork usually waits till the end of the day. We build apps your team uses on site, so what they put in goes straight into your system and the office is up to date before they're back.",
     points: [
-      { title: "Apps for the people on site", text: "Your team records the job on their phone while they are still there." },
+      { title: "Apps for the people on site", text: "Your team records the job on their phone while they're still there." },
       { title: "Straight into your database", text: "What they enter lands in your system as they go, with nothing to type up later." },
       { title: "Missed calls into the CRM", text: "A missed call to your work phone becomes a lead you can follow up." },
-      { title: "Reporting and analytics on top", text: "You get a clear view of what has been done and what has been billed." },
+      { title: "Reporting and analytics on top", text: "You get a clear view of what's been done and what's been billed." },
     ],
     client: "cwe",
     built: "Steve records his survey findings and meterage in an app on site, which moves the lead on and tells the customer a proposal is coming.",
@@ -120,7 +120,7 @@ const other = {
     "Putting an invoice pack together for the contractor",
     "Texting new leads to tell them to expect a call",
     "Adding missed calls to the lead list",
-    "Chasing proposals that have not been signed",
+    "Chasing proposals that haven't been signed",
   ],
   ctaLine: "Tell us the job that eats your week.",
 };
@@ -240,7 +240,7 @@ const icons: Record<string, string> = {
             <p class="lead">{other.lead}</p>
           </div>
           <div class="covers">
-            <p class="label">Jobs we have already taken off someone's desk</p>
+            <p class="label">Jobs we've already taken off someone's desk</p>
             <ul class="points jobs">
               {other.jobs.map((job) => (
                 <li>
@@ -263,7 +263,7 @@ const icons: Record<string, string> = {
           <div class="rule"></div>
           <div class="client-block">
             <p class="label">Who you talk to</p>
-            <p class="built">You talk to Aaron and Luke, and there is nobody in the middle, so the people on your discovery call are the people who build your tool.</p>
+            <p class="built">You talk to Aaron and Luke. There's nobody in the middle, so the people on your discovery call are the ones who build your tool.</p>
           </div>
         </div>
       </div>

@@ -8,24 +8,29 @@
 // under the heading.
 // On phones the chapters stack open, each with the same rule above it as the desktop
 // columns. There is no fold and no "What's in the video" row any more.
-// Copy matches the board 1:1. Do not change without Aaron.
+// 12 Oct 2026: the real video went in (public/video/sortoise-demo.mp4, 1:34, the invoicing tool
+// demo with made-up data). The heading and the three chapters now describe that video, with its
+// real timings.
 //
-// embedUrl: the video's embed address (YouTube or Vimeo "embed" link). Empty for now,
-// so the play button is there but does nothing until the address is added.
+// src: the video file on this site (public/video). Played in the browser's own player.
+// embedUrl: a YouTube or Vimeo "embed" address, only used if there is no src.
 // poster / posterWebp: the image shown in the frame before play (jpg fallback plus webp).
-// Currently the placeholder still of Aaron until the real video thumbnail exists.
+// Now a still from the video itself ("Log it from the van.", 0:09).
+// The play button and the swap to the video live in src/scripts/video-frame.ts.
 interface Props {
+  src?: string;
   embedUrl?: string;
   poster?: string;
   posterWebp?: string;
 }
 
-const { embedUrl = "", poster = "", posterWebp = "" } = Astro.props;
+const { src = "", embedUrl = "", poster = "", posterWebp = "" } = Astro.props;
 
+// If the video is re-cut, change these times to match.
 const chapters = [
-  { time: "0:00", title: "The job that eats your week", text: "Spreadsheets, paper, WhatsApp and the owner's memory." },
-  { time: "0:40", title: "One tool, built to fit", text: "Logged once, done properly, nothing depends on you remembering." },
-  { time: "1:20", title: "Then we keep it running", text: "Hosting, fixes, changes, and the next plate when you need it." },
+  { time: "0:00", title: "Log it from the van", text: "The job's done, so it goes in on your phone before you drive off." },
+  { time: "0:22", title: "Waiting at your desk", text: "The invoice is ready when you get back, with the VAT worked out and the health and safety sheet to print with it." },
+  { time: "0:50", title: "Your whole business, on one screen", text: "Every invoice in one place, a read-only view for your bookkeeper, and room to add what you need." },
 ];
 ---
 
@@ -33,20 +38,20 @@ const chapters = [
   <div class="inner">
     <div class="eyebrow video-eyebrow">Watch</div>
 
-    <div class="frame" data-embed={embedUrl}>
+    <div class="frame" data-video-frame data-src={src} data-embed={embedUrl} data-title="Sortoise invoicing tool, from the van to the desk">
       {poster && (
         <picture class="poster">
           {posterWebp && <source srcset={posterWebp} type="image/webp" />}
           <img src={poster} alt="" width="1600" height="900" loading="lazy" decoding="async" />
         </picture>
       )}
-      <button type="button" class="play" aria-label="Play video">
+      <button type="button" class="play" data-play aria-label="Play the video">
         <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.5v13l11-6.5-11-6.5z" fill="#ffffff"></path></svg>
       </button>
     </div>
 
     <div class="heading">
-      <h2>How we diagnose a business, <span class="nowrap">then sort it</span></h2>
+      <h2>Here's one of our tools <span class="nowrap">doing the paperwork</span></h2>
     </div>
 
     <div id="video-chapters" class="chapters">
@@ -64,21 +69,7 @@ const chapters = [
 </section>
 
 <script>
-  // Play: when the frame has an embed address, swap the frame contents for the video player.
-  // With no address yet, the button does nothing.
-  document.querySelectorAll<HTMLElement>(".video .frame").forEach((frame) => {
-    const play = frame.querySelector<HTMLButtonElement>(".play");
-    play?.addEventListener("click", () => {
-      const src = frame.dataset.embed;
-      if (!src) return;
-      const iframe = document.createElement("iframe");
-      iframe.src = src + (src.includes("?") ? "&" : "?") + "autoplay=1";
-      iframe.title = "Sortoise video";
-      iframe.allow = "autoplay; fullscreen; picture-in-picture";
-      iframe.setAttribute("allowfullscreen", "");
-      frame.replaceChildren(iframe);
-    });
-  });
+  import "../scripts/video-frame.ts";
 </script>
 
 <style>
@@ -119,6 +110,10 @@ const chapters = [
   .poster { position: absolute; inset: 0; width: 100%; height: 100%; }
   .poster img { display: block; width: 100%; height: 100%; object-fit: cover; }
   .frame :global(iframe) { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .frame :global(video) {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: contain; background: var(--deep-950);
+  }
   .play {
     position: relative;
     width: 96px; height: 96px; padding: 0; border: 0;

@@ -14,7 +14,7 @@
 const faqs = [
   {
     q: "What do you actually build?",
-    a: "Custom software and web apps, custom CRMs, business admin and process automation, and mobile apps for the field. If none of those look like your business, don't panic, because if there's a task that eats your time we can almost certainly build a tool to save it.",
+    a: "Mostly four things: custom software and web apps, custom CRMs, admin and process automation, and mobile apps for people out in the field. If none of those sound like your business, don't panic. If there's a task that eats your time, we can almost certainly build a tool to save it.",
   },
   {
     q: "What happens on the discovery call?",
@@ -38,6 +38,9 @@ const faqs = [
   },
 ];
 
+// Any answer still starting "[PLACEHOLDER" is left off the page until Aaron writes it.
+const shown = faqs.filter((f) => !f.a.startsWith("[PLACEHOLDER"));
+
 // Where the "Send us a message" link goes: the quiz page, opened on its message tab.
 const ctaHref = "/quiz#message";
 ---
@@ -50,7 +53,7 @@ const ctaHref = "/quiz#message";
     </div>
 
     <div class="list">
-      {faqs.map((item, i) => (
+      {shown.map((item, i) => (
         <details class="row" name="home-faq" open={i === 0}>
           <summary>
             <span class="question">{item.q}</span>

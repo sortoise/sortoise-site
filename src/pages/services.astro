@@ -14,7 +14,7 @@ import Footer from "../components/Footer.astro";
 // The three steps. Each one is backed by a sentence from a client's review.
 const steps = [
   {
-    title: "We learn how you really work",
+    title: "We learn how you actually work",
     quote:
       "Aaron and Luke took the time to understand how we actually work on site, then built a system where the lads fill in a form on the job and the invoice is created and stored automatically with the right rates and VAT already applied.",
     name: "Wayne",
@@ -23,7 +23,7 @@ const steps = [
     photoFallback: "/images/wayne-dw-jenkins.jpg",
   },
   {
-    title: "We build one place to run it from",
+    title: "We build one place to run it all from",
     quote:
       "What Aaron and Luke have built does everything we want and more, and we can finally do everything from one application.",
     name: "Steve",
@@ -32,7 +32,7 @@ const steps = [
     photoFallback: "/images/steve-cavity-wall.jpg",
   },
   {
-    title: "We stay on hand afterwards",
+    title: "We're still around afterwards",
     quote:
       "The service and aftercare was excellent, and anything I need I can just WhatsApp the lads and it's sorted straight away.",
     name: "Steve",
@@ -68,7 +68,7 @@ const ctaHref = "/quiz";
 
 <PageShell
   title="Services | Sortoise"
-  description="Custom software and web apps, custom CRMs, business admin and process automation, and mobile apps for the field. See what each one covers and where we have already built it."
+  description="Custom software and web apps, custom CRMs, business admin and process automation, and mobile apps for the field. See what each one covers and who we've built it for."
 >
   <div class="page-ground">
     <div class="nav-wrap">
@@ -77,10 +77,10 @@ const ctaHref = "/quiz";
     <header class="head">
       <h1>What we can build for your business</h1>
       <p class="sub">
-        Four kinds of tool cover most of what we build. Pick one below to see what it covers and
-        where we have already built it.
+        Most of what we build falls into four types. Pick one to see what it covers and who we've
+        built it for.
       </p>
-      <a class="note" href="/case-study">See what we have built</a>
+      <a class="note" href="/case-study">See what we've built</a>
     </header>
     <main>
       <ServicePicker />
@@ -91,8 +91,8 @@ const ctaHref = "/quiz";
             <p class="eyebrow">How it goes</p>
             <h2 id="how-head">What working with us is like, in our clients' words.</h2>
             <p class="small">
-              It starts with a free discovery call, which is a chance for us to understand your
-              business and work out whether we can get it sorted.
+              It starts with a free discovery call. It's a chance for us to understand your business
+              and work out whether we can get it sorted.
             </p>
           </div>
           <ol class="steps">
@@ -133,12 +133,12 @@ const ctaHref = "/quiz";
         <div class="card closing">
           <h2 id="closing-head" class="closing-head">Got a task that eats up your week?</h2>
           <p>
-            Share it with us on a free discovery call. It's a chance for us to understand your
-            business and work out whether we can get it sorted.
+            Tell us about it and we'll set up a free discovery call. It's a chance for us to
+            understand your business and work out whether we can get it sorted.
           </p>
           <div class="actions">
             <a href={ctaHref} class="pill">Get It Sorted</a>
-            <a href="/case-study" class="see">See what we have built</a>
+            <a href="/case-study" class="see">See what we've built</a>
           </div>
         </div>
       </section>
